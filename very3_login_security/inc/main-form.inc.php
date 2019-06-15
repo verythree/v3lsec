@@ -15,7 +15,7 @@
     <form id="v3-lsec-main-form" method="post" action="#">
       <input type="hidden" name="v3-lsec-save-settings" value="yep" />
 
-      <div class="v3-lsec-2-c">
+      <div class="v3-lsec-3-c">
         <div class="v3-lsec-1-c">
           <label>Max Auth Attempts</label>
           <input type="text" name="maxtries" value="<?php echo isset($_xml_data->maxtries) ? $_xml_data->maxtries : '';?>" placeholder="Sane value: 3-5" />
@@ -27,6 +27,10 @@
         <div class="v3-lsec-1-c">
           <label>Support URL</label>
           <input type="text" name="support" value="<?php echo isset($_xml_data->support) ? $_xml_data->support : '';?>" placeholder="https://www.support-site.tld" />
+        </div>
+        <div class="v3-lsec-1-c">
+          <input type="checkbox" id="disable-ipinfo-checkbox" name="disable-ipinfo" value="yes" <?php echo isset($_xml_data->disable_ipinfo) ? 'checked' : '';?>>
+          <label for="disable-ipinfo-checkbox">Disable Lookups to ipinfo.io</label>
         </div>
       </div>
 

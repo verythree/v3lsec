@@ -103,6 +103,14 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
+.v3-lsec-3-c {
+  display: grid;
+  grid-template-columns: 24% 24% 50%;
+  grid-gap: 5px;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
 .v3-lsec-1-c {
   width: 90%;
 }
@@ -126,4 +134,13 @@
   background: #fff;
   padding: 6px;
   width: 120px;
+}
+
+#v3-lsec-report_wrapper table td {
+  border-bottom: 1px solid #e0e0e0;
+  border-top: 0;
+}
+
+#v3-lsec-report_wrapper table .even {
+  background-color: #f0f0f0;
 }

@@ -132,11 +132,9 @@ function v3_lsec_router() {
 
 #--------------------------------------------------------------------------------------------------
 function v3_lsec_ipinfo() {
-  global $v3_lsec;
-
   $_return = array();
-  $_ripa   = $ENV{'REMOTE_ADDR'};
-  $_json   = json_decode(file_get_contents("http://ipinfo.io/".$_ripa."/json"));
+  $_ripa   = $_SERVER['REMOTE_ADDR'];
+  $_json   = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
 
   if (isset($_json->city)) { 
     $_return['city']     = $_json->city;
@@ -155,7 +153,6 @@ function v3_lsec_ipinfo() {
     $_return['org']      = '-';
   }
 
-die(print_r($_return));
   return $_return;
 }
 #--------------------------------------------------------------------------------------------------
@@ -165,7 +162,7 @@ die(print_r($_return));
 function v3_lsec_login() {
   global $user_xml, $userid, $password, $v3_lsec;
 
-  $_state  = array();
+  $_state           = array();
   $_state['date']   = date("c");
   $_state['auth']   = 'Failed';
   $_state['email']  = 'none';
@@ -179,9 +176,6 @@ function v3_lsec_login() {
   $_state  = array_merge($_state,v3_lsec_ipinfo());
   $_ipfile = $v3_lsec['conf']['datapath'].'/db/ip.db/'.$_state['ripa'];
 
-  die(print_r($_state));
-
-
   if (file_exists($_ipfile)) {
     $_stat  = stat($_ipfile);
     $_tleft = (time() - $_stat[9]);
@@ -193,7 +187,7 @@ function v3_lsec_login() {
 
       ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-email.inc.php');
       $_state['msg'] = ob_get_clean();
-      $_state['sub'] = '[Blocked] IP Address '.$_state['ripa'].' at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
+      $_state['sub'] = '[Blocked] IP Address '.$_state['ripa'].' at '.$_state['site'].' ('.$_state['url'].')';
 
       syslog(LOG_WARNING|LOG_LOCAL0, 'V3SEC:'.$_state['sub']);
       v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
@@ -269,43 +263,47 @@ function v3_lsec_report() {
     }
   }
 
-  array_push($_table,'<table id="v3-lsec-report">');
+  array_push($_table,'
+    <table id="v3-lsec-report">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Auth</th>
+          <th>User</th>
+          <th>IP</th>
+          <th>Country</th>
+          <th>Lat / Long</th>
+        </tr>
+      </thead>
+      <tbody>
+  ');
 
   if (file_exists($_log_file)) {
     $_csv = array_map('str_getcsv', file($_log_file));
+    $_names = $_csv[0];
 
-    foreach ($_csv as $_c) {
-      $_coord = explode(',',$_c[10]);
+    foreach ($_csv as $_cl) {
 
-      if ($_counter == 0) {
-        array_push($_table,'<thead>');
+      if ($_counter > 0) {
+        $_c = array_combine($_names,$_cl);
+        $_coord = explode(',',$_c['location']);
+
         array_push($_table,'<tr>');
-        array_push($_table,'<th>'.$_c[0].'</th>');
-        array_push($_table,'<th>'.$_c[1].'</th>');
-        array_push($_table,'<th>'.$_c[3].'</th>');
-        array_push($_table,'<th>'.$_c[5].'</th>');
-        array_push($_table,'<th>'.$_c[8].'</th>');
-        array_push($_table,'<th>'.$_c[10].'</th>');
-        array_push($_table,'</tr>');
-        array_push($_table,'</thead><tbody>');
-      }
-      else {
-        array_push($_table,'<tr>');
-        array_push($_table,'<td>'.$_c[0].'</td>');
-        array_push($_table,'<td>'.$_c[1].'</td>');
-        array_push($_table,'<td>'.$_c[3].'</td>');
+        array_push($_table,'<td>'.$_c['date'].'</td>');
+        array_push($_table,'<td>'.$_c['auth'].'</td>');
+        array_push($_table,'<td>'.$_c['user'].'</td>');
  
-        if ($_c[11] != '-') {
-          array_push($_table,'<td><a href="#" title="'.$_c[11].'" class="v3-lsec-arin-lookup" data-ripa='.$_c[5].'">'.$_c[5].'</a></td>');
+        if ($_c['org'] != '-') {
+          array_push($_table,'<td><a href="#" title="'.$_c['org'].'" class="v3-lsec-arin-lookup" data-ripa='.$_c['ripa'].'">'.$_c['ripa'].'</a></td>');
         }
         else {
-          array_push($_table,'<td><a href="#" class="v3-lsec-arin-lookup" data-ripa='.$_c[5].'">'.$_c[5].'</a></td>');
+          array_push($_table,'<td><a href="#" class="v3-lsec-arin-lookup" data-ripa='.$_c['ripa'].'">'.$_c['ripa'].'</a></td>');
         }
 
-        array_push($_table,'<td>'.$_c[8].'</td>');
+        array_push($_table,'<td>'.$_c['country'].'</td>');
         
-        if ($_c[10] != '-,-') {
-          array_push($_table,'<td><a href="#" class="v3-lsec-openstreetmap-lookup" title="'.$_c[6].' '.$_c[7].' '.$_c[8].' '.$_c[9].'" data-lon="'.$_coord[0].'" data-lat="'.$_coord[1].'">'.$_c[10].'</a></td>');
+        if ($_c['location'] != '-,-') {
+          array_push($_table,'<td><a href="#" class="v3-lsec-openstreetmap-lookup" title="'.$_c['city'].' '.$_c['region'].' '.$_c['country'].' '.$_c['postal'].'" data-lon="'.$_coord[0].'" data-lat="'.$_coord[1].'">'.$_c['location'].'</a></td>');
         }
         else {
           array_push($_table,'<td>-</td>');
