@@ -34,6 +34,6 @@ at least one "Send SMS on..." option to receive SMS notifications.
 
 [![alt text](http://get-simple.info/data/uploads/getsimple-logo-2.png "GetSimple")](http://get-simple.info/)
 
-GetSimple
+GetSimple CMS
 
 
