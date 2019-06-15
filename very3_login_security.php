@@ -10,7 +10,7 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.4',
-  'debug'    => true,
+  'debug'    => false,
   'moddate'  => 'Fri Jun 14 14:24:00 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -47,6 +47,7 @@ else {
 }
 
 if ($v3_lsec['conf']['debug']) {
+  define('GSDEBUG', TRUE);
   $_dump = get_defined_vars();
   ob_start(); print_r($_dump);
   $_output = date("c")."\n".ob_get_clean();
@@ -252,7 +253,6 @@ function v3_lsec_report() {
         $_action_feedback = 'alert("Access Logs Cleared");';
       }
     }
-    }
 
     if ($_GET['report-action'] == 'clear-blocked') {
       $_sem_path = $v3_lsec['conf']['datapath'].'/db/ip.db';
@@ -292,7 +292,6 @@ function v3_lsec_report() {
     $_names = $_csv[0];
 
     foreach ($_csv as $_cl) {
-
       if ($_counter > 0) {
         $_c = array_combine($_names,$_cl);
         $_coord = explode(',',$_c['location']);
