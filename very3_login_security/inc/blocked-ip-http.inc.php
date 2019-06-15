@@ -20,18 +20,18 @@
         <?php if (!empty($v3_lsec['conf']['settings']['support'])) {?>
         <p>
           If you feel you have reached this page in error or need assistance with account credentials, please visit
-          <a target="_blank" href="<?php echo $v3_lsec['conf']['settings']['support'];?>"><?php echo $v3_lsec['conf']['settings']['support'];?></a>
+          <a target="_blank" href="<?php echo $v3_lsec['conf']['settings']['support'];?>"><?php echo $v3_lsec['conf']['settings']['support'];?></a>.
         </p>
         <?php }?>
-        <div class="footer">
-          IP: <?php echo $_state['ripa'];?>,
-          ORG: <?php echo $_state['org'];?>,
-          CITY: <?php echo $_state['city'];?>,
-          REGION: <?php echo $_state['region'];?>,
-          COUNTRY: <?php echo $_state['country'];?>,
-          POSTAL: <?php echo $_state['postal'];?>,
-          LOC: <?php echo $_state['location'];?>
-        </div>
+      </div>
+      <div class="footer">
+        IP: <?php echo $_state['ripa'];?>,
+        ORG: <?php echo $_state['org'];?>,
+        CITY: <?php echo $_state['city'];?>,
+        REGION: <?php echo $_state['region'];?>,
+        COUNTRY: <?php echo $_state['country'];?>,
+        POSTAL: <?php echo $_state['postal'];?>,
+        LOC: <?php echo $_state['location'];?>
       </div>
     </div>
   </div>
