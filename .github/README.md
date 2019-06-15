@@ -31,7 +31,9 @@ notification. You must configure email addresses (they can be the same) and sele
 receive email notifications.  The SMS function requires that you have a [Twilio](https://www.twilio.com/) account and select 
 at least one "Send SMS on..." option to receive SMS notifications.
 #
+
 [![alt text](http://get-simple.info/data/uploads/getsimple-logo-2.png "GetSimple")](http://get-simple.info/)
+
 GetSimple
 
 
