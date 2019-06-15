@@ -15,7 +15,7 @@
     <form id="v3-lsec-main-form" method="post" action="#">
       <input type="hidden" name="v3-lsec-save-settings" value="yep" />
 
-      <div class="v3-lsec-3-c">
+      <div class="v3-lsec-2-c">
         <div class="v3-lsec-1-c">
           <label>Max Auth Attempts</label>
           <input type="text" name="maxtries" value="<?php echo isset($_xml_data->maxtries) ? $_xml_data->maxtries : '';?>" placeholder="Sane value: 3-5" />
@@ -26,10 +26,10 @@
         </div>
         <div class="v3-lsec-1-c">
           <label>Support URL</label>
-          <input type="text" name="support" value="<?php echo isset($_xml_data->support) ? $_xml_data->support : '';?>" placeholder="https://www.support-site.tld" />
+          <input type="text" name="support" value="<?php echo isset($_xml_data->support) ? $_xml_data->support : '';?>" title="Adds a support link to the blocked notification page" placeholder="https://www.support-site.tld" />
         </div>
-        <div class="v3-lsec-1-c">
-          <input type="checkbox" id="disable-ipinfo-checkbox" name="disable-ipinfo" value="yes" <?php echo isset($_xml_data->disable_ipinfo) ? 'checked' : '';?>>
+        <div class="v3-lsec-1-c" style="padding-top:20px;">
+          <input type="checkbox" id="disable-ipinfo-checkbox" title="Disables lookups to ipinfo.io and turns off the location logging. If your server is on a slow connection and logins are taking a long time, you may want to disable this." name="disable_ipinfo" value="yes" <?php echo isset($_xml_data->disable_ipinfo) ? 'checked' : '';?>>
           <label for="disable-ipinfo-checkbox">Disable Lookups to ipinfo.io</label>
         </div>
       </div>

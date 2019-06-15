@@ -10,7 +10,7 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.4',
-  'debug'    => false,
+  'debug'    => true,
   'moddate'  => 'Fri Jun 14 14:24:00 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -33,6 +33,7 @@ $v3_lsec['conf'] = [
     'sms_send_failed'    => 'no',
     'sms_send_blocked'   => 'no',
     'sms_send_success'   => 'no',
+    'disable_ipinfo'     => 'no',
   ],
 ];
 
@@ -64,8 +65,8 @@ register_plugin(
   $v3_lsec['conf']['author'],   // Plugin author
   $v3_lsec['conf']['url'],      // Author website
   $v3_lsec['conf']['desc'],     // Plugin description
-  $v3_lsec['conf']['type'],     // Page type - on which admin tab to display
-  $v3_lsec['conf']['router']    // Main function (administration)
+  $v3_lsec['conf']['type'],     // Page type
+  $v3_lsec['conf']['router']    // Main function
 );
 
 
@@ -132,9 +133,14 @@ function v3_lsec_router() {
 
 #--------------------------------------------------------------------------------------------------
 function v3_lsec_ipinfo() {
+  global $v3_lsec;
+
   $_return = array();
   $_ripa   = $_SERVER['REMOTE_ADDR'];
-  $_json   = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
+
+  if ($v3_lsec['conf']['settings']['disable_ipinfo'] != 'yes') {
+    $_json   = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
+  }
 
   if (isset($_json->city)) { 
     $_return['city']     = $_json->city;
@@ -240,9 +246,12 @@ function v3_lsec_report() {
   $_log_file        = $v3_lsec['conf']['datapath'].'/logs/access.log';
 
   if (isset($_GET['report-action'])) {
-    if ($_GET['report-action'] == 'clear-logs') {
-      unlink($_log_file);
-      $_action_feedback = 'alert("Access Logs Cleared")';
+    if (file_exists($_log_file)) {
+      if ($_GET['report-action'] == 'clear-logs') {
+        unlink($_log_file);
+        $_action_feedback = 'alert("Access Logs Cleared");';
+      }
+    }
     }
 
     if ($_GET['report-action'] == 'clear-blocked') {
@@ -259,7 +268,7 @@ function v3_lsec_report() {
         }
       }
 
-      $_action_feedback = 'alert("Blocked IPs Addresses Cleared")';
+      $_action_feedback = 'alert("Blocked IP Addresses Cleared");';
     }
   }
 
@@ -314,13 +323,12 @@ function v3_lsec_report() {
 
       $_counter++;
     }
-    array_push($_table,'</tbody>');
   }
   else {
-    array_push($_table,'<tr><td>No Logs Yet!</td></tr>');
+    array_push($_table,'<tr><td colspan="100%" style="text-align:center;">No Logs. Such empty.</td></tr>');
   }
 
-  array_push($_table,'</table>');
+  array_push($_table,'</tbody></table>');
   require($v3_lsec['conf']['plugpath'].'/inc/main-report.inc.php');
 }
 #--------------------------------------------------------------------------------------------------

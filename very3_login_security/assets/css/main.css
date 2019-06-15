@@ -105,7 +105,7 @@
 
 .v3-lsec-3-c {
   display: grid;
-  grid-template-columns: 24% 24% 50%;
+  grid-template-columns: 30% 30% 40%;
   grid-gap: 5px;
   padding: 0 0 8px 0;
   border-bottom: 1px solid #e0e0e0;
@@ -134,6 +134,10 @@
   background: #fff;
   padding: 6px;
   width: 120px;
+}
+
+#v3-lsec-report_wrapper table thead th {
+    padding: 10px 0 4px 10px;
 }
 
 #v3-lsec-report_wrapper table td {
