@@ -31,11 +31,3 @@ notification. You must configure email addresses (they can be the same) and sele
 receive email notifications.  The SMS function requires that you have a [Twilio](https://www.twilio.com/) account and select 
 at least one "Send SMS on..." option to receive SMS notifications.
 
-### Well crap, I've locked myself out of my GS site
-Then it sucks to be you right now. If you have access to another computer on another network (from a different IP address, duh) or 
-maybe via a cellular link, you can simply login and click the "Clear Blocks" button from the V3LSEC tab. If you have ssh access to
-your GetSimple host, login and dig down to your GS data folder (usually in the base install dir) then go to */other/very3_login_security/db/*
-and delete the *ip.db* folder.
-
-Or you can just wait. =)
-
