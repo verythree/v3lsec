@@ -9,7 +9,7 @@ $v3_lsec['conf'] = [
   'plugin'   => basename(__FILE__, ".php"),
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
-  'version'  => '1.0.3',
+  'version'  => '1.0.4',
   'debug'    => false,
   'moddate'  => 'Fri Jun 14 14:24:00 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
@@ -131,6 +131,112 @@ function v3_lsec_router() {
 
 
 #--------------------------------------------------------------------------------------------------
+function v3_lsec_ipinfo() {
+  global $v3_lsec;
+
+  $_return = array();
+  $_ripa   = $ENV{'REMOTE_ADDR'};
+  $_json   = json_decode(file_get_contents("http://ipinfo.io/".$_ripa."/json"));
+
+  if (isset($_json->city)) { 
+    $_return['city']     = $_json->city;
+    $_return['region']   = $_json->region;
+    $_return['country']  = $_json->country;
+    $_return['postal']   = $_json->postal;
+    $_return['location'] = $_json->loc;
+    $_return['org']      = $_json->org;
+  }
+  else {
+    $_return['city']     = '-';
+    $_return['region']   = '-';
+    $_return['country']  = '-';
+    $_return['postal']   = '-';
+    $_return['location'] = '-,-';
+    $_return['org']      = '-';
+  }
+
+die(print_r($_return));
+  return $_return;
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_lsec_login() {
+  global $user_xml, $userid, $password, $v3_lsec;
+
+  $_state  = array();
+  $_state['date']   = date("c");
+  $_state['auth']   = 'Failed';
+  $_state['email']  = 'none';
+  $_state['user']   = $userid;
+  $_state['pass']   = $password;
+  $_state['ripa']   = $_SERVER['REMOTE_ADDR'];
+  $_state['site']   = $v3_lsec['conf']['sitename'];
+  $_state['url']    = $v3_lsec['conf']['siteurl'];
+  $_state['uagent'] = $_SERVER['HTTP_USER_AGENT'];
+
+  $_state  = array_merge($_state,v3_lsec_ipinfo());
+  $_ipfile = $v3_lsec['conf']['datapath'].'/db/ip.db/'.$_state['ripa'];
+
+  die(print_r($_state));
+
+
+  if (file_exists($_ipfile)) {
+    $_stat  = stat($_ipfile);
+    $_tleft = (time() - $_stat[9]);
+    $_lines = count(file($_ipfile));
+
+    if ((($_lines % $v3_lsec['conf']['settings']['maxtries']) == 0) and ($_tleft < $v3_lsec['conf']['settings']['timeout'])) {
+      $_state['auth'] = 'Blocked';
+      log_state($_state,'access',$v3_lsec);
+
+      ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-email.inc.php');
+      $_state['msg'] = ob_get_clean();
+      $_state['sub'] = '[Blocked] IP Address '.$_state['ripa'].' at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
+
+      syslog(LOG_WARNING|LOG_LOCAL0, 'V3SEC:'.$_state['sub']);
+      v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
+      v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
+
+      require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-http.inc.php');
+      exit;
+    }
+  }
+
+  if (file_exists($user_xml)){
+    $_data = getXML($user_xml);
+    if (passhash($password) == $_data->PWD and strtolower($userid) == strtolower($_data->USR)) {
+      $_state['auth']  = 'Successful';
+      $_state['email'] = $_data->EMAIL;
+      $_state['pass']  = '*****';
+    }
+  }
+
+  if ($_state['auth'] == 'Failed') {
+    if (!stat($v3_lsec['conf']['datapath'].'/db/ip.db')) {
+      mkdir($v3_lsec['conf']['datapath'].'/db/ip.db', 0700, true);
+    }
+    $_db  = fopen($_ipfile,"a+");
+    fwrite($_db, '"'.date("c").'","'.$_state['user'].'","'.$_state['pass']."\"\n");
+    fclose($_db);
+  }
+
+  log_state($_state,'access',$v3_lsec);
+
+  ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/login-email.inc.php');
+  $_state['msg'] = ob_get_clean();
+  $_state['sub'] = '['.$_state['auth'].'] user login by '.$userid.' ('.$_state['email'].') at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
+
+  syslog(LOG_WARNING|LOG_LOCAL0,'V3SEC:'.$_state['sub']);
+  v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
+  v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
+}
+
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
 function v3_lsec_report() {
   global $v3_lsec;
 
@@ -219,96 +325,6 @@ function v3_lsec_report() {
   array_push($_table,'</table>');
   require($v3_lsec['conf']['plugpath'].'/inc/main-report.inc.php');
 }
-#--------------------------------------------------------------------------------------------------
-
-
-#--------------------------------------------------------------------------------------------------
-function v3_lsec_login() {
-  global $user_xml, $userid, $password, $v3_lsec;
-
-  $_state  = array();
-  $_state['date']  = date("c");
-  $_state['auth']  = 'Failed';
-  $_state['email'] = 'none';
-  $_state['user']  = $userid;
-  $_state['pass']  = $password;
-  $_state['ripa']  = $_SERVER['REMOTE_ADDR'];
-
-  $_ipfile = $v3_lsec['conf']['datapath'].'/db/ip.db/'.$_state['ripa'];
-  $_json   = json_decode(file_get_contents("http://ipinfo.io/{$_state['ripa']}/json"));
-
-  if (isset($_json->city)) { 
-    $_state['city']     = $_json->city;
-    $_state['region']   = $_json->region;
-    $_state['country']  = $_json->country;
-    $_state['postal']   = $_json->postal;
-    $_state['location'] = $_json->loc;
-    $_state['org']      = $_json->org;
-  }
-  else {
-    $_state['city']     = '-';
-    $_state['region']   = '-';
-    $_state['country']  = '-';
-    $_state['postal']   = '-';
-    $_state['location'] = '-,-';
-    $_state['org']      = '-';
-  }
-
-  $_state['site']     = $v3_lsec['conf']['sitename'];
-  $_state['url']      = $v3_lsec['conf']['siteurl'];
-  $_state['uagent']   = $_SERVER['HTTP_USER_AGENT'];
-
-  if (file_exists($_ipfile)) {
-    $_stat  = stat($_ipfile);
-    $_tleft = (time() - $_stat[9]);
-    $_lines = count(file($_ipfile));
-
-    if ((($_lines % $v3_lsec['conf']['settings']['maxtries']) == 0) and ($_tleft < $v3_lsec['conf']['settings']['timeout'])) {
-      $_state['auth'] = 'Blocked';
-      log_state($_state,'access',$v3_lsec);
-
-      ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-email.inc.php');
-      $_state['msg'] = ob_get_clean();
-      $_state['sub'] = '[Blocked] IP Address '.$_state['ripa'].' at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
-
-      syslog(LOG_WARNING|LOG_LOCAL0, 'V3SEC:'.$_state['sub']);
-      v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
-      v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
-
-      require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-http.inc.php');
-      exit;
-    }
-  }
-
-  if (file_exists($user_xml)){
-    $_data = getXML($user_xml);
-    if (passhash($password) == $_data->PWD and strtolower($userid) == strtolower($_data->USR)) {
-      $_state['auth']  = 'Successful';
-      $_state['email'] = $_data->EMAIL;
-      $_state['pass']  = '*****';
-    }
-  }
-
-  if ($_state['auth'] == 'Failed') {
-    if (!stat($v3_lsec['conf']['datapath'].'/db/ip.db')) {
-      mkdir($v3_lsec['conf']['datapath'].'/db/ip.db', 0700, true);
-    }
-    $_db  = fopen($_ipfile,"a+");
-    fwrite($_db, '"'.date("c").'","'.$_state['user'].'","'.$_state['pass']."\"\n");
-    fclose($_db);
-  }
-
-  log_state($_state,'access',$v3_lsec);
-
-  ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/login-email.inc.php');
-  $_state['msg'] = ob_get_clean();
-  $_state['sub'] = '['.$_state['auth'].'] user login by '.$userid.' ('.$_state['email'].') at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
-
-  syslog(LOG_WARNING|LOG_LOCAL0,'V3SEC:'.$_state['sub']);
-  v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
-  v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
-}
-
 #--------------------------------------------------------------------------------------------------
 
 
