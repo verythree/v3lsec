@@ -8,6 +8,9 @@
 </div>
 <script>
   <?php echo $_action_feedback;?>
+  $(document).ready(function() {
+    $("a[href*='load.php?id=very3_login_security&report']").addClass('current');
+  });
 </script>
 
 

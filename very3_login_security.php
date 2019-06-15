@@ -190,7 +190,14 @@ function v3_lsec_report() {
         array_push($_table,'<td>'.$_c[3].'</td>');
         array_push($_table,'<td><a href="#" class="v3-lsec-arin-lookup" data-ripa='.$_c[5].'">'.$_c[5].'</a></td>');
         array_push($_table,'<td>'.$_c[8].'</td>');
-        array_push($_table,'<td><a href="#" class="v3-lsec-openstreetmap-lookup" data-lon="'.$_coord[0].'" data-lat="'.$_coord[1].'">'.$_c[10].'</a></td>');
+        
+        if ($_c[10] != '-,-') {
+          array_push($_table,'<td><a href="#" class="v3-lsec-openstreetmap-lookup" data-lon="'.$_coord[0].'" data-lat="'.$_coord[1].'">'.$_c[10].'</a></td>');
+        }
+        else {
+          array_push($_table,'<td>-</td>');
+        }
+
         array_push($_table,'</tr>');
       }
 
