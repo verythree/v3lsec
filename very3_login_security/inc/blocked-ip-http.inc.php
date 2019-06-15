@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Blocked IP Address: <?php echo $_state['ripa'];?></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"  />
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/plugins/<?php echo $v3_lsec['conf']['plugin'];?>/assets/css/main.css?v=1.0" rel="stylesheet" media="screen">
+</head>
+<body id="v3-lsec-blocked">
+  <div class="outer">
+    <div class="inner">
+      <h3>Blocked IP Address: <?php echo $_state['ripa'];?></h3>
+      <p>
+        The IP address of your computer (<?php echo $_state['ripa'];?>) has been blocked by this server due to failed logon attempts.
+        You will not be able to access the <b><?php echo $v3_lsec['conf']['sitename'];?></b> admin panel for <b><?php echo round(($v3_lsec['conf']['settings']['timeout'] - $_tleft)/60);?>
+        minutes</b>. Once this time has elapsed, the block will be lifted and you may try again.
+      </p>
+      <?php if (!empty($v3_lsec['conf']['settings']['support'])) {?>
+      <p>
+        If you feel you have reached this page in error or need assistance with account credentials, please visit
+        <a target="_blank" href="<?php echo $v3_lsec['conf']['settings']['support'];?>"><?php echo $v3_lsec['conf']['settings']['support'];?></a>
+      </p>
+      <?php }?>
+      <p class="footer">
+        [
+        <?php echo $_state['ripa'];?>,
+        <?php echo $_state['org'];?>,
+        <?php echo $_state['city'];?>,
+        <?php echo $_state['region'];?>,
+        <?php echo $_state['country'];?>,
+        <?php echo $_state['postal'];?>,
+        <?php echo $_state['location'];?>
+        ]
+      </p>
+    </div>
+  </div>
+</body>
+</html>

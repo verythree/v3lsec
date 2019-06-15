@@ -1,0 +1,106 @@
+#v3-lsec-blocked {
+  margin: 0;
+  font-family: sans-serif;
+  background: url(/plugins/very3_login_security/assets/img/stripe.png);
+}
+
+#v3-lsec-blocked .outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#v3-lsec-blocked .inner {
+  width: 50%;
+  max-width: 500px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #000;
+}
+
+#v3-lsec-blocked .footer {
+  color: #909090;
+  font-size: 12px;
+}
+
+#v3-lsec-main {
+  font-family: sans-serif;
+  width: 99%;
+  margin: auto;
+}
+
+#v3-lsec-notes-wrapper {
+  font-family: sans-serif;
+  margin: 0 0 40px 0;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+#v3-lsec-notes-wrapper a {
+  font-weight: normal;
+}
+
+#v3-lsec-form-wrapper {
+  margin: 0 auto;
+  padding: 0 10px 0 10px;
+}
+
+#v3-lsec-main input[type="submit"],
+#v3-lsec-main input[type="text"] {
+  padding: 8px;
+  margin: 2px 0 2px 0;
+  border: 1px solid #415a66;
+  border-radius: 2px;
+}
+
+#v3-lsec-main input[type="text"] {
+  width: 100%;
+}
+
+#v3-lsec-main input[type="checkbox"] {
+  float: left;
+  margin: 1px 4px 0 0;
+}
+
+#v3-lsec-main input[type="submit"] {
+  float: right;
+  background-color: #fff;
+  margin: 0 10px 0 0;
+}
+
+#v3-lsec-main label {
+}
+
+.v3-lsec-2-c {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 5px;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.v3-lsec-1-c {
+  width: 90%;
+}
+
+.v3-lsec-spacer {
+  height: 30px;
+}
+
+#v3-lsec-report_wrapper .dataTables_length select,
+#v3-lsec-report_wrapper .dataTables_paginate .paginate_button.current, 
+#v3-lsec-report_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: #fff;
+}
+
+#v3-lsec-report-buttons {
+  margin: 20px 0 0 0;
+}
+
+#v3-lsec-report-buttons input[type="button"] {
+  border: 1px solid #a0a0a0;
+  background: #fff;
+  padding: 6px;
+  width: 120px;
+}

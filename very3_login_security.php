@@ -1,0 +1,430 @@
+<?php
+//
+// Very3 Login Security Plugin for GetSimple CMS
+// (c)2019 Very3 (Mark Page [mark@very3.net])
+//---------------------------------------------------
+// See https://github.com/verythree/v3lsec
+//
+$v3_lsec['conf'] = [
+  'plugin'   => basename(__FILE__, ".php"),
+  'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
+  'datapath' => GSDATAOTHERPATH.'/very3_login_security',
+  'version'  => '1.0.2',
+  'debug'    => false,
+  'moddate'  => 'Fri Jun 14 14:24:00 2019 -0500',
+  'author'   => 'Very3 [mark@very3.net]',
+  'url'      => 'https://very3.net',
+  'type'     => 'very3_login_security',
+  'tabname'  => 'V3LSEC',
+  'setup'    => 'v3_lsec_setup',
+  'login'    => 'v3_lsec_login',
+  'report'   => 'v3_lsec_report',
+  'router'   => 'v3_lsec_router',
+  'name'     => 'Very3 Login Security',
+  'desc'     => 'Mitigate brute-force login attempts by blocking IP addresses with failed logins for a configured time span. Optionally provides notifications via email and/or SMS (with Twilio account) for admin panel login activity. See <a href="https://github.com/verythree/v3lsec">https://github.com/verythree/v3lsec</a> for more info.',
+  'sitename' => $SITENAME,
+  'siteurl'  => $SITEURL,
+  'settings' => [
+    'maxtries'           => 5,
+    'timeout'            => 600,
+    'email_send_failed'  => 'no',
+    'email_send_blocked' => 'no',
+    'email_send_success' => 'no',
+    'sms_send_failed'    => 'no',
+    'sms_send_blocked'   => 'no',
+    'sms_send_success'   => 'no',
+  ],
+];
+
+if (file_exists($v3_lsec['conf']['datapath'].'/config.xml')) {
+  $v3_lsec['conf']['settings'] = array_merge($v3_lsec['conf']['settings'],(array) getXml($v3_lsec['conf']['datapath'].'/config.xml'));
+}
+else {
+  if (!file_exists(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'])) {
+    mkdir(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'], 0700, true);
+  }
+}
+
+if ($v3_lsec['conf']['debug']) {
+  $_dump = get_defined_vars();
+  ob_start(); print_r($_dump);
+  $_output = date("c")."\n".ob_get_clean();
+  file_put_contents($v3_lsec['conf']['datapath'].'/.debug',$_output);
+}
+else {
+  if (file_exists($v3_lsec['conf']['datapath'].'/.debug')) {
+    unlink($v3_lsec['conf']['datapath'].'/.debug');
+  }
+}
+
+register_plugin(
+  $v3_lsec['conf']['plugin'],   // Plugin id
+  $v3_lsec['conf']['name'],     // Plugin name
+  $v3_lsec['conf']['version'],  // Plugin version
+  $v3_lsec['conf']['author'],   // Plugin author
+  $v3_lsec['conf']['url'],      // Author website
+  $v3_lsec['conf']['desc'],     // Plugin description
+  $v3_lsec['conf']['type'],     // Page type - on which admin tab to display
+  $v3_lsec['conf']['router']    // Main function (administration)
+);
+
+
+add_action(
+  'successful-login-start',
+  $v3_lsec['conf']['login']
+);
+
+add_action(
+  'nav-tab',
+  'createNavTab',
+  array(
+    $v3_lsec['conf']['plugin'],
+    $v3_lsec['conf']['plugin'],
+    $v3_lsec['conf']['tabname'],
+    $v3_lsec['conf']['router']
+  )
+);
+
+add_action(
+  'very3_login_security-sidebar',
+  'createSideMenu',
+  array(
+    $v3_lsec['conf']['plugin'],
+    'Access Log',
+    'report'
+  )
+);
+
+add_action(
+  'very3_login_security-sidebar',
+  'createSideMenu',
+  array(
+    $v3_lsec['conf']['plugin'],
+    'Settings',
+    'setup'
+  )
+);
+
+register_style ('v3_lsec_dt_css', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css', '1.10.19', FALSE);
+queue_style ('v3_lsec_dt_css', GSBACK);
+
+register_style ('v3_lsec_css', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/css/main.css', '1.0', FALSE);
+queue_style ('v3_lsec_css', GSBACK);
+
+register_script('v3_lsec_dt_js', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js', '1.10.19', TRUE);
+queue_script('v3_lsec_dt_js', GSBACK);
+
+register_script('v3_lsec_js', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/js/main.js', '1.0', TRUE);
+queue_script('v3_lsec_js', GSBACK);
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_lsec_router() {
+  if (isset($_GET['setup'])) {
+    v3_lsec_setup();
+  }
+  else {
+    v3_lsec_report();
+  }
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_lsec_report() {
+  global $v3_lsec;
+
+  $_action_feedback = '';
+  $_table           = array();
+  $_counter         = 0;
+  $_log_file        = $v3_lsec['conf']['datapath'].'/logs/access.log';
+
+  if (isset($_GET['report-action'])) {
+    if ($_GET['report-action'] == 'clear-logs') {
+      unlink($_log_file);
+      $_action_feedback = 'alert("Access Logs Cleared")';
+    }
+
+    if ($_GET['report-action'] == 'clear-blocked') {
+      $_sem_path = $v3_lsec['conf']['datapath'].'/db/ip.db';
+      $_it = new RecursiveDirectoryIterator($_sem_path, RecursiveDirectoryIterator::SKIP_DOTS);
+      $_sems = new RecursiveIteratorIterator($_it,RecursiveIteratorIterator::CHILD_FIRST);
+
+      foreach($_sems as $_s) {
+        if ($_s->isDir()){
+          rmdir($_s->getRealPath());
+        } 
+        else {
+          unlink($_s->getRealPath());
+        }
+      }
+
+      $_action_feedback = 'alert("Blocked IPs Addresses Cleared")';
+    }
+  }
+
+  array_push($_table,'<table id="v3-lsec-report">');
+
+  if (file_exists($_log_file)) {
+    $_csv = array_map('str_getcsv', file($_log_file));
+
+    foreach ($_csv as $_c) {
+      $_coord = explode(',',$_c[10]);
+
+      if ($_counter == 0) {
+        array_push($_table,'<thead>');
+        array_push($_table,'<tr>');
+        array_push($_table,'<th>'.$_c[0].'</th>');
+        array_push($_table,'<th>'.$_c[1].'</th>');
+        array_push($_table,'<th>'.$_c[3].'</th>');
+        array_push($_table,'<th>'.$_c[5].'</th>');
+        array_push($_table,'<th>'.$_c[8].'</th>');
+        array_push($_table,'<th>'.$_c[10].'</th>');
+        array_push($_table,'</tr>');
+        array_push($_table,'</thead><tbody>');
+      }
+      else {
+        array_push($_table,'<tr>');
+        array_push($_table,'<td>'.$_c[0].'</td>');
+        array_push($_table,'<td>'.$_c[1].'</td>');
+        array_push($_table,'<td>'.$_c[3].'</td>');
+        array_push($_table,'<td><a href="#" class="v3-lsec-arin-lookup" data-ripa='.$_c[5].'">'.$_c[5].'</a></td>');
+        array_push($_table,'<td>'.$_c[8].'</td>');
+        array_push($_table,'<td><a href="#" class="v3-lsec-openstreetmap-lookup" data-lon="'.$_coord[0].'" data-lat="'.$_coord[1].'">'.$_c[10].'</a></td>');
+        array_push($_table,'</tr>');
+      }
+
+      $_counter++;
+    }
+    array_push($_table,'</tbody>');
+  }
+  else {
+    array_push($_table,'<tr><td>No Logs Yet!</td></tr>');
+  }
+
+  array_push($_table,'</table>');
+  require($v3_lsec['conf']['plugpath'].'/inc/main-report.inc.php');
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_lsec_login() {
+  global $user_xml, $userid, $password, $v3_lsec;
+
+  $_state  = array();
+  $_state['date']  = date("c");
+  $_state['auth']  = 'Failed';
+  $_state['email'] = 'none';
+  $_state['user']  = $userid;
+  $_state['pass']  = $password;
+  $_state['ripa']  = $_SERVER['REMOTE_ADDR'];
+
+  $_ipfile = $v3_lsec['conf']['datapath'].'/db/ip.db/'.$_state['ripa'];
+  $_json   = json_decode(file_get_contents("http://ipinfo.io/{$_state['ripa']}/json"));
+
+  if (isset($_json->city)) { 
+    $_state['city']     = $_json->city;
+    $_state['region']   = $_json->region;
+    $_state['country']  = $_json->country;
+    $_state['postal']   = $_json->postal;
+    $_state['location'] = $_json->loc;
+    $_state['org']      = $_json->org;
+  }
+  else {
+    $_state['city']     = '-';
+    $_state['region']   = '-';
+    $_state['country']  = '-';
+    $_state['postal']   = '-';
+    $_state['location'] = '-,-';
+    $_state['org']      = '-';
+  }
+
+  $_state['site']     = $v3_lsec['conf']['sitename'];
+  $_state['url']      = $v3_lsec['conf']['siteurl'];
+  $_state['uagent']   = $_SERVER['HTTP_USER_AGENT'];
+
+  if (file_exists($_ipfile)) {
+    $_stat  = stat($_ipfile);
+    $_tleft = (time() - $_stat[9]);
+    $_lines = count(file($_ipfile));
+
+    if ((($_lines % $v3_lsec['conf']['settings']['maxtries']) == 0) and ($_tleft < $v3_lsec['conf']['settings']['timeout'])) {
+      $_state['auth'] = 'Blocked';
+      log_state($_state,'access',$v3_lsec);
+
+      ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-email.inc.php');
+      $_state['msg'] = ob_get_clean();
+      $_state['sub'] = '[Blocked] IP Address '.$_state['ripa'].' at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
+
+      syslog(LOG_WARNING|LOG_LOCAL0, 'V3SEC:'.$_state['sub']);
+      v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
+      v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
+
+      require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-http.inc.php');
+      exit;
+    }
+  }
+
+  if (file_exists($user_xml)){
+    $_data = getXML($user_xml);
+    if (passhash($password) == $_data->PWD and strtolower($userid) == strtolower($_data->USR)) {
+      $_state['auth']  = 'Successful';
+      $_state['email'] = $_data->EMAIL;
+      $_state['pass']  = '*****';
+    }
+  }
+
+  if ($_state['auth'] == 'Failed') {
+    if (!stat($v3_lsec['conf']['datapath'].'/db/ip.db')) {
+      mkdir($v3_lsec['conf']['datapath'].'/db/ip.db', 0700, true);
+    }
+    $_db  = fopen($_ipfile,"a+");
+    fwrite($_db, '"'.date("c").'","'.$_state['user'].'","'.$_state['pass']."\"\n");
+    fclose($_db);
+  }
+
+  log_state($_state,'access',$v3_lsec);
+
+  ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/login-email.inc.php');
+  $_state['msg'] = ob_get_clean();
+  $_state['sub'] = '['.$_state['auth'].'] user login by '.$userid.' ('.$_state['email'].') at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
+
+  syslog(LOG_WARNING|LOG_LOCAL0,'V3SEC:'.$_state['sub']);
+  v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
+  v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
+}
+
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function log_state($_state,$_log,$v3_lsec) {
+  $_log_path   = $v3_lsec['conf']['datapath'].'/logs/'.$_log.'.log';
+  $_log_header = '"'.join('","',array_keys($_state))."\"\n";
+  $_log_entry  = '"'.join('","',array_values($_state))."\"\n";
+
+  if (!stat($v3_lsec['conf']['datapath'].'/logs')) {
+    mkdir($v3_lsec['conf']['datapath'].'/logs', 0700, true);
+  }
+
+  if (!file_exists($_log_path)) {
+    $_log_file  = fopen($_log_path,"a+");
+    fwrite($_log_file, $_log_header);
+    fclose($_log_file);
+  }
+
+  $_log_file  = fopen($_log_path,"a+");
+  fwrite($_log_file, $_log_entry);
+  fclose($_log_file);
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_send_email($_sub,$_msg,$v3_lsec) {
+  $_send_flag = true;
+
+  if (empty($v3_lsec['conf']['settings']['to']) or empty($v3_lsec['conf']['settings']['from'])) {
+    $_send_flag = false;
+  }
+
+  if (preg_match('/Successful/',$_sub) and $v3_lsec['conf']['settings']['email_send_success'] != 'yes') {
+    $_send_flag = false;
+  }
+
+  if (preg_match('/Blocked/',$_sub) and $v3_lsec['conf']['settings']['email_send_blocked'] != 'yes') {
+    $_send_flag = false;
+  }
+
+  if (preg_match('/Failed/',$_sub) and $v3_lsec['conf']['settings']['email_send_failed'] != 'yes') {
+    $_send_flag = false;
+  }
+
+  if ($_send_flag) {
+    $_smfrm = ' -f '.$v3_lsec['conf']['settings']['from'];
+    $_to    = $v3_lsec['conf']['settings']['to'];
+    $_hdr   = "From: ".$v3_lsec['conf']['settings']['from']."\r\n";
+    $_hdr  .= 'Reply-To: '.$v3_lsec['conf']['settings']['from']."\r\n";
+    $_hdr  .= "X-Mailer: Very3 Inline Mailer\r\n";
+    $_hdr  .= "MIME-Version: 1.0" . "\r\n";
+    $_hdr  .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $_err   = mail($_to,$_sub,$_msg,$_hdr,$_smfrm);
+  }
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_send_sms($_sub,$_msg,$v3_lsec) {
+  $_send_flag = true;
+
+  if (empty($v3_lsec['conf']['settings']['tw_to']) or empty($v3_lsec['conf']['settings']['tw_from'])) {
+    $_send_flag = false;
+  }
+
+  if (preg_match('/Successful/',$_sub) and $v3_lsec['conf']['settings']['sms_send_success'] != 'yes') {
+    $_send_flag = false;
+  }
+
+  if (preg_match('/Blocked/',$_sub) and $v3_lsec['conf']['settings']['sms_send_blocked'] != 'yes') {
+    $_send_flag = false;
+  }
+
+  if (preg_match('/Failed/',$_sub) and $v3_lsec['conf']['settings']['sms_send_failed'] != 'yes') {
+    $_send_flag = false;
+  }
+
+  if ($_send_flag) {
+    $_tw_url  = "https://api.twilio.com/2010-04-01/Accounts/".$v3_lsec['conf']['settings']['tw_sid']."/SMS/Messages";
+    $_tw_from = $v3_lsec['conf']['settings']['tw_from'];
+    $_tw_to   = $v3_lsec['conf']['settings']['tw_to'];
+    $_tw_auth = $v3_lsec['conf']['settings']['tw_sid'].':'.$v3_lsec['conf']['settings']['tw_token'];
+    $_tw_data = array('From' => $_tw_from,'To' => $_tw_to,'Body' => $_sub);
+
+    $_tw_post = http_build_query($_tw_data);
+    $_tw_curl = curl_init($_tw_url);
+
+    curl_setopt($_tw_curl, CURLOPT_POST, true);
+    curl_setopt($_tw_curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($_tw_curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($_tw_curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($_tw_curl, CURLOPT_USERPWD, "$_tw_auth");
+    curl_setopt($_tw_curl, CURLOPT_POSTFIELDS, $_tw_post);
+
+    $_tw_response = curl_exec($_tw_curl);
+    curl_close($_tw_curl);
+  }
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_lsec_setup() {
+  global $v3_lsec;
+
+  $_xml_data      = array();
+  $_form_feedback = '';
+  $_xml_save_resp = array(
+    'There was an error writing the configuration, please check your folder and file permissions.',
+    'Configuration Saved.',
+  );
+
+  if (isset($_POST['v3-lsec-save-settings'])) {
+    $_xml_out = new SimpleXMLExtended('<?xml version="1.0" encoding="UTF-8"?><item></item>');
+    foreach ($_POST as $_n => $_d) {
+      $_node = $_xml_out->addChild($_n);
+      $_node->addCData($_d);
+    }
+    $_xml_save_resp_index = XMLsave($_xml_out, $v3_lsec['conf']['datapath'].'/config.xml');
+    $_form_feedback = 'alert("'.$_xml_save_resp[$_xml_save_resp_index].'")';
+  }
+
+  if (file_exists($v3_lsec['conf']['datapath'].'/config.xml')) {
+    $_xml_data = getXml($v3_lsec['conf']['datapath'].'/config.xml');
+  }
+
+  require($v3_lsec['conf']['plugpath'].'/inc/main-form.inc.php');
+}
+#--------------------------------------------------------------------------------------------------
+
