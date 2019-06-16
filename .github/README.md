@@ -21,8 +21,8 @@ The main report page links the IP addresses to the [ARIN Whois/RDAP](https://sea
 longitude coordinates to the [OpenStreetMap](https://www.openstreetmap.org) search. The report page also allows viewing the 
 entire logged dataset but clicking on the record's datestamp field.
 
-The Very3 Login Security Plugin creates syslog entries that can be leveraged by services such as [Fail2ban](https://www.fail2ban.org) 
-and [OSSEC](https://www.ossec.net/). 
+The Very3 Login Security Plugin will also create syslog entries that can be leveraged by services such as 
+[Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/). 
 
 ### Installation & Configuration
 To install this plugin, download the zip file and extract to your GetSimple plugins folder. Once installed and activated, see 
