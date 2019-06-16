@@ -9,7 +9,6 @@
   margin: 0 0 2px 0;
   background-color: red;
   color: #fff;
-  border-bottom: 1px solid #000;
 }
 
 #v3-lsec-blocked p {
@@ -29,7 +28,9 @@
   max-width: 600px;
   background: #fff;
   padding: 0;
-  border: 1px solid #000;
+  margin: 0;
+  border: 0px solid black;
+  box-shadow: 10px 10px 5px black;
 }
 
 #v3-lsec-blocked .content {

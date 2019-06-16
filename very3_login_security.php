@@ -10,8 +10,8 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.5',
-  'debug'    => false,
-  'moddate'  => 'Sun Jun 16 06:57:55 2019 -0500',
+  'debug'    => true,
+  'moddate'  => 'Sun Jun 16 07:54:24 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
   'type'     => 'very3_login_security',
@@ -69,7 +69,6 @@ register_plugin(
   $v3_lsec['conf']['type'],     // Page type
   $v3_lsec['conf']['router']    // Main function
 );
-
 
 add_action(
   'successful-login-start',
@@ -140,7 +139,7 @@ function v3_lsec_ipinfo() {
   $_ripa   = $_SERVER['REMOTE_ADDR'];
 
   if ($v3_lsec['conf']['settings']['disable_ipinfo'] != 'yes') {
-    $_json   = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
+    $_json = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
   }
 
   if (isset($_json->city)) { 
@@ -181,6 +180,7 @@ function v3_lsec_login() {
   $_state['uagent'] = $_SERVER['HTTP_USER_AGENT'];
 
   $_state  = array_merge($_state,v3_lsec_ipinfo());
+  $_state  = array_merge($_state,v3_lsec_check_user());
   $_ipfile = $v3_lsec['conf']['datapath'].'/db/ip.db/'.$_state['ripa'];
 
   if (file_exists($_ipfile)) {
@@ -189,7 +189,6 @@ function v3_lsec_login() {
     $_lines = count(file($_ipfile));
 
     if ((($_lines % $v3_lsec['conf']['settings']['maxtries']) == 0) and ($_tleft < $v3_lsec['conf']['settings']['timeout'])) {
-      $_state = array_merge($_state,v3_lsec_check_user());
       $_state['auth'] = 'Blocked';
       log_state($_state,'access',$v3_lsec);
 
@@ -205,8 +204,6 @@ function v3_lsec_login() {
       exit;
     }
   }
-
-  $_state = array_merge($_state,v3_lsec_check_user());
 
   if ($_state['auth'] == 'Failed') {
     if (!stat($v3_lsec['conf']['datapath'].'/db/ip.db')) {
@@ -251,8 +248,8 @@ function v3_lsec_check_user() {
   }
   else {
     $_return['auth']  = 'Failed';
-    $_return['email'] = '[no user]';
-    $_return['pass']  = '[no user]';
+    $_return['email'] = '[invalid user]';
+    $_return['pass']  = '[invalid user]';
   }
 
   return $_return;
