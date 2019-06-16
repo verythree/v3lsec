@@ -3,8 +3,8 @@
 ### A word of caution...
 If you're looking to use this with your GetSimple website, we suggest grabbing the packaged version in the GetSimple Extend 
 Repository at [http://get-simple.info/extend/plugin/v3lsec-very3-login-security/1211/](http://get-simple.info/extend/plugin/v3lsec-very3-login-security/1211/).
-The Github version (the one you're looking at now) is automatically updated from the development source and may have a bug 
-or two or thirteen. ;-)
+The Github version (the one you're looking at now) is automatically updated from the development build environmant and may 
+have a bug or two -- or thirteen. ;-)
 
 ### About
 The Very3 Login Security Plugin for GetSimple CMS utilizes the GS [*successful-login-start*](http://get-simple.info/wiki/plugins:hooks_filters)
