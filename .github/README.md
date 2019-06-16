@@ -18,11 +18,11 @@ utilizing the [IPinfo API](http://ipinfo.io) (free version, limited to 1000 requ
 from the plugin's settings page if desired.
 
 The main report page links the IP addresses to the [ARIN Whois/RDAP](https://search.arin.net/rdap/) search and the latitude / 
-longitude coordinates to the [OpenStreetMap](https://www.openstreetmap.org) search. The report page also allows viewing the 
-entire logged dataset but clicking on the record's datestamp field.
+longitude coordinates to the [OpenStreetMap](https://www.openstreetmap.org) search. The entire logged dataset can be viewed by 
+clicking the record's datestamp field.
 
-The Very3 Login Security Plugin will also create syslog entries that can be leveraged by services such as 
-[Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/). 
+For kicks, the Very3 Login Security Plugin also creates syslog entries that can be leveraged by services such as 
+[Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/) if you'd like to take it up a notch. Bam.
 
 ### Installation & Configuration
 To install this plugin, download the zip file and extract to your GetSimple plugins folder. Once installed and activated, see 
