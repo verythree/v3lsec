@@ -14,14 +14,15 @@ count reaches the desired threshold the plugin disallows any form authentication
 block is cleared from the report page in the GS admin panel.
 
 Additionally the plugin provides granular notifications via email and SMS, and logs location data based on the remote IP by 
-utilizing the [IPinfo API](http://ipinfo.io) (free version, limited to 1000 requests per day). The main report page links 
-the IP addresses to the [ARIN Whois/RDAP](https://search.arin.net/rdap/) search and the latitude/longitude coordinates to the 
-[OpenStreetMap](https://www.openstreetmap.org) search. The report page also allows viewing the entire logged dataset but
-clicking the record's datestamp.
+utilizing the [IPinfo API](http://ipinfo.io) (free version, limited to 1000 requests per day). IPInfo queries can be disabled 
+from the plugin's settings page if desired.
 
-This plugin does not prevent or mitigate IP-based network attacks on your GetSimple host server, it simply prevents 
-the login page form from being submitted for a given IP address for a configured duration. That said, this plugin does
-create syslog entries that can be leveraged by services such as [Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/).
+The main report page links the IP addresses to the [ARIN Whois/RDAP](https://search.arin.net/rdap/) search and the latitude / 
+longitude coordinates to the [OpenStreetMap](https://www.openstreetmap.org) search. The report page also allows viewing the 
+entire logged dataset but clicking on the record's datestamp field.
+
+The V3LSEC plugin creates syslog entries that can be leveraged by services such as [Fail2ban](https://www.fail2ban.org) 
+and [OSSEC](https://www.ossec.net/). 
 
 ### Installation & Configuration
 To install this plugin, download the zip file and extract to your GetSimple plugins folder. Once installed and activated, see 
