@@ -47,7 +47,8 @@ else {
 }
 
 if ($v3_lsec['conf']['debug']) {
-  define('GSDEBUG', TRUE);
+  defined('GSDEBUG') or define('GSDEBUG', true);
+  defined('GSERRORLOGENABLE') or define('GSERRORLOGENABLE', true);
   $_dump = get_defined_vars();
   ob_start(); print_r($_dump);
   $_output = date("c")."\n".ob_get_clean();
