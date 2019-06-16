@@ -2,11 +2,11 @@
   <h3><?php echo isset($v3_lsec['conf']['name']) ? $v3_lsec['conf']['name']: '';?></h3>
 
   <div id="v3-lsec-notes-wrapper">
-      Out of the box, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and send no notification.
-      You must add both email addresses (they can be the same) and select at least one "Send Email on..." option to recieve email notifications. 
-      The SMS function requires that you have a <a href="https://www.twilio.com/" target="_blank">Twilio</a> account and select at least one 
-      "Send SMS on..." option to receive SMS notifications. This plugin also creates syslog entries that can be leveraged by services such as
-      <a href="https://www.fail2ban.org" target="_blank">Fail2ban</a> and <a href="https://www.ossec.net/" target="_blank">OSSEC</a>.
+    Out of the box, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and send no notification.
+    You must add both email addresses (they can be the same) and select at least one "Send Email on..." option to recieve email notifications. 
+    The SMS function requires that you have a <a href="https://www.twilio.com/" target="_blank">Twilio</a> account and select at least one 
+    "Send SMS on..." option to receive SMS notifications. This plugin also creates syslog entries that can be leveraged by services such as
+    <a href="https://www.fail2ban.org" target="_blank">Fail2ban</a> and <a href="https://www.ossec.net/" target="_blank">OSSEC</a>.
   </div>
 
   <div style="clear:both;"></div>

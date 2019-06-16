@@ -1,4 +1,14 @@
 $(document).ready(function() {
+  $('.v3-lsec-show-full').on('click', function() {
+    $('#v3-lsec-overlay-content').html($(this).data('full')); 
+    $('#v3-lsec-overlay').show();
+  });
+
+  $('#v3-lsec-overlay-closer').on('click', function() {
+    $('#v3-lsec-overlay-content').html(); 
+    $('#v3-lsec-overlay').hide();
+  });
+
   $('.v3-lsec-arin-lookup').on('click', function() {
     window.open("https://search.arin.net/rdap/?query="+$(this).data('ripa'));
   });

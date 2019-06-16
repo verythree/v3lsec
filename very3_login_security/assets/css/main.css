@@ -148,3 +148,72 @@
 #v3-lsec-report_wrapper table .even {
   background-color: #f0f0f0;
 }
+
+#v3-lsec-overlay {
+  z-index: 10000;
+  position: absolute;
+  width: 50vw;
+  padding: 0;
+  background-color: #fff;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  left: 0;
+  right: 0;
+  border: 1px solid #333;
+  box-shadow: 2px 2px 4px #555;
+}
+#v3-lsec-overlay table {
+  width: 100%;
+  margin: auto;
+}
+#v3-lsec-overlay table tr {
+  border: 0;
+}
+#v3-lsec-overlay table tr:nth-child(even) td,
+#v3-lsec-overlay table tr:nth-child(even) th {
+  background-color: #f2f2f2 !important;
+}
+#v3-lsec-overlay table th,
+#v3-lsec-overlay table td {
+  padding: 4px;
+  margin: 0;
+  border: 0;
+}
+#v3-lsec-overlay table th {
+  text-align: right;
+  vertical-align: top;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header {
+  text-align: left;
+  background-color: #333;
+  width: 100%;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid #333;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header #v3-lsec-overlay-title {
+  color: #e0e0e0;
+  font-size: 18px;
+  padding: 0 0 0 8px;
+  line-height: 38px;
+  text-decoration: none;
+  font-weight: bold;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header #v3-lsec-overlay-closer {
+  float: right;
+  padding: 5px 15px 0 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 32px;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header #v3-lsec-overlay-closer:hover {
+  color: red;
+}
+#v3-lsec-overlay #v3-lsec-overlay-content {
+  margin: 0;
+  padding: 10px;
+}
+

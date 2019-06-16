@@ -293,16 +293,21 @@ function v3_lsec_report() {
 
     foreach ($_csv as $_cl) {
       if ($_counter > 0) {
+        $_d = array();
         $_c = array_combine($_names,$_cl);
         $_coord = explode(',',$_c['location']);
 
+        foreach ($_c as $_cn => $_cv) {
+          array_push($_d,'<tr><th>'.$_cn.'</th><td>'.$_cv.'</td></tr>');
+        }
+
         array_push($_table,'<tr>');
-        array_push($_table,'<td>'.$_c['date'].'</td>');
+        array_push($_table,'<td><a href="#" class="v3-lsec-show-full" data-full="<table>'.join('',$_d).'"</table>'.$_c['date'].'</a></td>');
         array_push($_table,'<td>'.$_c['auth'].'</td>');
         array_push($_table,'<td>'.$_c['user'].'</td>');
  
         if ($_c['org'] != '-') {
-          array_push($_table,'<td><a href="#" title="'.$_c['org'].'" class="v3-lsec-arin-lookup" data-ripa='.$_c['ripa'].'">'.$_c['ripa'].'</a></td>');
+          array_push($_table,'<td><a href="#" title="'.$_c['org'].'" class="v3-lsec-arin-lookup" data-ripa="'.$_c['ripa'].'">'.$_c['ripa'].'</a></td>');
         }
         else {
           array_push($_table,'<td><a href="#" class="v3-lsec-arin-lookup" data-ripa='.$_c['ripa'].'">'.$_c['ripa'].'</a></td>');
