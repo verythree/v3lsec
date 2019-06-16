@@ -10,15 +10,17 @@ or two or thirteen. ;-)
 The Very3 Login Security Plugin for GetSimple CMS utilizes the GS [*successful-login-start*](http://get-simple.info/wiki/plugins:hooks_filters)
 hook and attempts to verify the user name and password hash before completing the authentication flow. If the user does not exist 
 or the login credentials appear to be bogus, a counter is incremented based on the user's IP address (REMOTE_ADDR). Once the 
-count reaches the desired threshold the plugin disallows any form authentication flow until the set timeout occurs.
+count reaches the desired threshold the plugin disallows any form authentication flow until the set timeout occurs or the
+block is cleared from the report page in the GS admin panel.
 
 Additionally the plugin provides granular notifications via email and SMS, and logs location data based on the remote IP by 
-utilizing the [IPinfo API](http://ipinfo.io) (the free version limited to 1000 requests per day). The main report page links 
+utilizing the [IPinfo API](http://ipinfo.io) (free version, limited to 1000 requests per day). The main report page links 
 the IP addresses to the [ARIN Whois/RDAP](https://search.arin.net/rdap/) search and the latitude/longitude coordinates to the 
-[OpenStreetMap](https://www.openstreetmap.org) search.
+[OpenStreetMap](https://www.openstreetmap.org) search. The report page also allows viewing the entire logged dataset but
+clicking the record's datestamp.
 
-This plugin **does not** prevent or mitigate IP-based network attacks on your GetSimple host server, it simply prevents 
-the login page form from being submitted for a given IP address for a configured duration. That said, this plugin **does** 
+This plugin does not prevent or mitigate IP-based network attacks on your GetSimple host server, it simply prevents 
+the login page form from being submitted for a given IP address for a configured duration. That said, this plugin does
 create syslog entries that can be leveraged by services such as [Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/).
 
 ### Installation & Configuration
@@ -26,8 +28,8 @@ To install this plugin, download the zip file and extract to your GetSimple plug
 the settings page under the "V3LSEC" tab for configuration options. For support, please visit the GetSimple Community Forum at
 [http://get-simple.info/forums/showthread.php?tid=10896](http://get-simple.info/forums/showthread.php?tid=10896).
 
-Out of the box, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and send no 
-notification. You must configure email addresses (they can be the same) and select at least one "Send Email on..." option to 
+Out of the box, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and does not 
+send notifications. You must configure email addresses (they can be the same) and select at least one "Send Email on..." option to 
 receive email notifications.  The SMS function requires that you have a [Twilio](https://www.twilio.com/) account and select 
 at least one "Send SMS on..." option to receive SMS notifications.
 #
