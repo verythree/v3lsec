@@ -30,9 +30,9 @@ the settings page under the "V3LSEC" tab for configuration options. For support,
 [http://get-simple.info/forums/showthread.php?tid=10896](http://get-simple.info/forums/showthread.php?tid=10896).
 
 Out of the box, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and does not 
-send notifications. You must configure email addresses (they can be the same) and select at least one "Send Email on..." option to 
-receive email notifications.  The SMS function requires that you have a [Twilio](https://www.twilio.com/) account and select 
-at least one "Send SMS on..." option to receive SMS notifications.
+send notifications. You must configure to/from email addresses (they can be the same) and select at least one "Send Email on..." 
+option to receive email notifications.  The SMS function requires that you have a [Twilio](https://www.twilio.com/) account and 
+select at least one "Send SMS on..." option to receive SMS notifications.
 #
 
 [![alt text](http://get-simple.info/data/uploads/getsimple-logo-2.png "GetSimple")](http://get-simple.info/)
