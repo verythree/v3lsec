@@ -16,7 +16,7 @@
   </div>
 </div>
 <script>
-  <?php echo $_action_feedback;?>
+  <?php echo $_act_err;?>
   $(document).ready(function() {
     $("a[href*='load.php?id=very3_login_security&report']").addClass('current');
   });

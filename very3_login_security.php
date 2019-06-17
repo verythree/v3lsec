@@ -10,7 +10,7 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.5',
-  'debug'    => false,
+  'debug'    => true,
   'moddate'  => 'Sun Jun 16 07:54:24 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -191,15 +191,15 @@ function v3_lsec_login() {
 
     if ((($_lines % $v3_lsec['conf']['settings']['maxtries']) == 0) and ($_tleft < $v3_lsec['conf']['settings']['timeout'])) {
       $_state['auth'] = 'Blocked';
-      log_state($_state,'access',$v3_lsec);
+      v3_lsec_log_state($_state,'access',$v3_lsec);
 
       ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-email.inc.php');
       $_state['msg'] = ob_get_clean();
       $_state['sub'] = '[Blocked] IP Address '.$_state['ripa'].' at '.$_state['site'].' ('.$_state['url'].')';
 
       syslog(LOG_WARNING|LOG_LOCAL0, 'V3SEC:'.$_state['sub']);
-      v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
-      v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
+      v3_lsec_send_email($_state['sub'],$_state['msg'],$v3_lsec);
+      v3_lsec_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
 
       require($v3_lsec['conf']['plugpath'].'/inc/blocked-ip-http.inc.php');
       exit;
@@ -215,15 +215,15 @@ function v3_lsec_login() {
     fclose($_db);
   }
 
-  log_state($_state,'access',$v3_lsec);
+  v3_lsec_log_state($_state,'access',$v3_lsec);
 
   ob_start(); require($v3_lsec['conf']['plugpath'].'/inc/login-email.inc.php');
   $_state['msg'] = ob_get_clean();
   $_state['sub'] = '['.$_state['auth'].'] user login by '.$userid.' ('.$_state['email'].') at '.$v3_lsec['conf']['sitename'].' ('.$v3_lsec['conf']['siteurl'].')';
 
   syslog(LOG_WARNING|LOG_LOCAL0,'V3SEC:'.$_state['sub']);
-  v3_send_email($_state['sub'],$_state['msg'],$v3_lsec);
-  v3_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
+  v3_lsec_send_email($_state['sub'],$_state['msg'],$v3_lsec);
+  v3_lsec_send_sms($_state['sub'],$_state['msg'],$v3_lsec);
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -262,34 +262,39 @@ function v3_lsec_check_user() {
 function v3_lsec_report() {
   global $v3_lsec;
 
-  $_action_feedback = '';
-  $_table           = array();
-  $_counter         = 0;
-  $_log_file        = $v3_lsec['conf']['datapath'].'/logs/access.log';
+  $_act_err  = '';
+  $_table    = array();
+  $_counter  = 0;
+  $_log_file = $v3_lsec['conf']['datapath'].'/logs/access.log';
 
   if (isset($_GET['report-action'])) {
-    if (file_exists($_log_file)) {
-      if ($_GET['report-action'] == 'clear-logs') {
-        unlink($_log_file);
-        $_action_feedback = 'alert("Access Logs Cleared");';
+    if ($_GET['report-action'] == 'clear-logs') {
+      if (file_exists($_log_file)) {
+        $_act_err = 'alert("Access Logs Cleared");';
+        if (!unlink($_log_file)) {
+          $_act_err = 'alert("There was a problem clearing the log.\nCheck your file permissions.");';
+        }
       }
     }
 
     if ($_GET['report-action'] == 'clear-blocked') {
+      $_act_err  = 'alert("Blocked IP Addresses Cleared");';
       $_sem_path = $v3_lsec['conf']['datapath'].'/db/ip.db';
-      $_it = new RecursiveDirectoryIterator($_sem_path, RecursiveDirectoryIterator::SKIP_DOTS);
-      $_sems = new RecursiveIteratorIterator($_it,RecursiveIteratorIterator::CHILD_FIRST);
+      $_it       = new RecursiveDirectoryIterator($_sem_path, RecursiveDirectoryIterator::SKIP_DOTS);
+      $_sems     = new RecursiveIteratorIterator($_it,RecursiveIteratorIterator::CHILD_FIRST);
 
       foreach($_sems as $_s) {
         if ($_s->isDir()){
-          rmdir($_s->getRealPath());
+          if (!rmdir($_s->getRealPath())) {
+            $_act_err = 'alert("There was a problem clearing the blocks.\nCheck your file permissions.");';
+          }
         } 
         else {
-          unlink($_s->getRealPath());
+          if (!unlink($_s->getRealPath())) {
+            $_act_err = 'alert("There was a problem clearing the blocks.\nCheck your file permissions.");';
+          }
         }
       }
-
-      $_action_feedback = 'alert("Blocked IP Addresses Cleared");';
     }
   }
 
@@ -360,7 +365,7 @@ function v3_lsec_report() {
 
 
 #--------------------------------------------------------------------------------------------------
-function log_state($_state,$_log,$v3_lsec) {
+function v3_lsec_log_state($_state,$_log,$v3_lsec) {
   $_log_path   = $v3_lsec['conf']['datapath'].'/logs/'.$_log.'.log';
   $_log_header = '"'.join('","',array_keys($_state))."\"\n";
   $_log_entry  = '"'.join('","',array_values($_state))."\"\n";
@@ -383,7 +388,7 @@ function log_state($_state,$_log,$v3_lsec) {
 
 
 #--------------------------------------------------------------------------------------------------
-function v3_send_email($_sub,$_msg,$v3_lsec) {
+function v3_lsec_send_email($_sub,$_msg,$v3_lsec) {
   $_send_flag = true;
 
   if (empty($v3_lsec['conf']['settings']['to']) or empty($v3_lsec['conf']['settings']['from'])) {
@@ -417,7 +422,7 @@ function v3_send_email($_sub,$_msg,$v3_lsec) {
 
 
 #--------------------------------------------------------------------------------------------------
-function v3_send_sms($_sub,$_msg,$v3_lsec) {
+function v3_lsec_send_sms($_sub,$_msg,$v3_lsec) {
   $_send_flag = true;
 
   if (empty($v3_lsec['conf']['settings']['tw_to']) or empty($v3_lsec['conf']['settings']['tw_from'])) {
