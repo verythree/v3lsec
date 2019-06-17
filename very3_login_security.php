@@ -270,7 +270,6 @@ function v3_lsec_report() {
   if (isset($_GET['report-action'])) {
     if ($_GET['report-action'] == 'clear-logs') {
       if (file_exists($_log_file)) {
-        $_act_err = 'alert("Access Logs Cleared");';
         if (!unlink($_log_file)) {
           $_act_err = 'alert("There was a problem clearing the log.\nCheck your file permissions.");';
         }
@@ -278,7 +277,6 @@ function v3_lsec_report() {
     }
 
     if ($_GET['report-action'] == 'clear-blocked') {
-      $_act_err  = 'alert("Blocked IP Addresses Cleared");';
       $_sem_path = $v3_lsec['conf']['datapath'].'/db/ip.db';
       $_it       = new RecursiveDirectoryIterator($_sem_path, RecursiveDirectoryIterator::SKIP_DOTS);
       $_sems     = new RecursiveIteratorIterator($_it,RecursiveIteratorIterator::CHILD_FIRST);
@@ -327,7 +325,7 @@ function v3_lsec_report() {
           array_push($_d,'<tr><th>'.$_cn.'</th><td>'.$_cv.'</td></tr>');
         }
 
-        array_push($_table,'<tr>');
+        array_push($_table,'<tr class="'.$_c['auth'].'">');
         array_push($_table,'<td><a href="#" class="v3-lsec-show-full" data-full="<table>'.join('',$_d).'"</table>'.$_c['date'].'</a></td>');
         array_push($_table,'<td>'.$_c['auth'].'</td>');
         array_push($_table,'<td>'.$_c['user'].'</td>');

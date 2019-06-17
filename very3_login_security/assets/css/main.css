@@ -146,8 +146,14 @@
   border-top: 0;
 }
 
-#v3-lsec-report_wrapper table .even {
-  background-color: #f0f0f0;
+#v3-lsec-report_wrapper table .Blocked {
+  background-color: #ffeeee;
+}
+#v3-lsec-report_wrapper table .Failed {
+  background-color: #ffffee;
+}
+#v3-lsec-report_wrapper table .Successful {
+  background-color: #eeffee;
 }
 
 #v3-lsec-overlay {

@@ -1,5 +1,6 @@
 $(document).ready(function() {
   $('.v3-lsec-show-full').on('click', function() {
+    $('#v3-lsec-overlay-title').html("Log Detail"); 
     $('#v3-lsec-overlay-content').html($(this).data('full')); 
     $('#v3-lsec-overlay').show();
   });

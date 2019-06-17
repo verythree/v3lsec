@@ -1,7 +1,7 @@
 
 <div style="display:none;" id="v3-lsec-overlay">
   <div id="v3-lsec-overlay-header">
-    <span id="v3-lsec-overlay-title">Log Detail</span>
+    <span id="v3-lsec-overlay-title"></span>
     <a id="v3-lsec-overlay-closer" href="#">&#10005;</a>
   </div>
   <div id="v3-lsec-overlay-content"></div>
