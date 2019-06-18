@@ -23,7 +23,7 @@ longitude coordinates to the [OpenStreetMap](https://www.openstreetmap.org) sear
 clicking the record's datestamp field.
 
 For kicks, the Very3 Login Security Plugin also creates syslog entries that can be leveraged by services such as 
-[Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/) if you'd like to take it up a notch. Bam.
+[Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/) if you'd like to kick it up a notch. Bam.
 
 ### Installation & Configuration
 To install this plugin, download the zip file and extract to your GetSimple plugins folder. Once installed and activated, see 
