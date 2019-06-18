@@ -353,7 +353,7 @@ function v3_lsec_report() {
     }
   }
   else {
-    array_push($_table,'<tr><td colspan="100%" style="text-align:center;">No Logs. Such empty.</td></tr>');
+    array_push($_table,'<tr><td colspan="100%" style="text-align:center;">Such empty.</td></tr>');
   }
 
   array_push($_table,'</tbody></table>');

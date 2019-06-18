@@ -11,10 +11,12 @@
   <h3><?php echo isset($v3_lsec['conf']['name']) ? $v3_lsec['conf']['name']: '';?></h3>
   <?php echo join('',$_table);?>
   <div id="v3-lsec-report-buttons">
-    <input type="button" id="v3-lsec-clear-logs" value="Clear Logs"/>
-    <input type="button" id="v3-lsec-clear-blocked" value="Clear Blocks"/>
+    <button id="v3-lsec-clear-logs"><i class="far fa-trash-alt"></i>&nbsp;&nbsp;Delete Log</button>
+    <button id="v3-lsec-clear-blocked"><i class="fas fa-ban"></i>&nbsp;&nbsp;Clear Blocks</button>
+    <button id="v3-lsec-reload-logs"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;Reload Page</button>
   </div>
 </div>
+
 <script>
   <?php echo $_act_err;?>
   $(document).ready(function() {

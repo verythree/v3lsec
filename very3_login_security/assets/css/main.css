@@ -130,11 +130,13 @@
   margin: 20px 0 0 0;
 }
 
-#v3-lsec-report-buttons input[type="button"] {
+#v3-lsec-report-buttons button {
   border: 1px solid #a0a0a0;
   background: #fff;
   padding: 6px;
   width: 120px;
+  font-size: 12px;
+  font-weight: normal;
 }
 
 #v3-lsec-report_wrapper table thead th {

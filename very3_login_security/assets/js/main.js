@@ -1,4 +1,7 @@
 $(document).ready(function() {
+  $('#nav_very3_login_security a i').removeClass('fa-puzzle-piece');
+  $('#nav_very3_login_security a i').addClass('fa-unlock-alt');
+
   $('.v3-lsec-show-full').on('click', function() {
     $('#v3-lsec-overlay-title').html("Log Detail"); 
     $('#v3-lsec-overlay-content').html($(this).data('full')); 
@@ -22,6 +25,10 @@ $(document).ready(function() {
     if (confirm("Clear access logs?\nAre you sure?")) {
       location.href="?id=very3_login_security&v3_lsec_router&report-action=clear-logs";
     }
+  });
+
+  $('#v3-lsec-reload-logs').on('click', function() {
+    location.href="/admin/load.php?id=very3_login_security&report";
   });
 
   $('#v3-lsec-clear-blocked').on('click', function() {
