@@ -22,7 +22,7 @@ The main report page links the IP addresses to the [ARIN Whois/RDAP](https://sea
 longitude coordinates to the [OpenStreetMap](https://www.openstreetmap.org) search. The entire logged dataset can be viewed by 
 clicking the record's datestamp field.
 
-For kicks, the Very3 Login Security Plugin also creates syslog entries that can be leveraged by services such as 
+The Very3 Login Security Plugin also creates syslog entries that can be leveraged by services such as 
 [Fail2ban](https://www.fail2ban.org) and [OSSEC](https://www.ossec.net/) if you'd like to kick it up a notch. Bam.
 
 ### Installation & Configuration
