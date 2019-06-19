@@ -62,14 +62,18 @@ else {
   }
 }
 
-if (isset($v3_lsec['conf']['settings']['plugin_admins'])) {
+if (!empty($v3_lsec['conf']['settings']['plugin_admins'])) {
   $_admins = str_getcsv($v3_lsec['conf']['settings']['plugin_admins']);
+  $_admins = str_replace(' ', '', $_admins);
   foreach ($_admins as $_a) {
     if (strtolower($USR) == strtolower($_a)) {
       $v3_lsec['conf']['is_admin'] = true;
       break;
     }
   }
+}
+else {
+  $v3_lsec['conf']['is_admin'] = true;
 }
 
 register_plugin(

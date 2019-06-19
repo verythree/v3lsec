@@ -5,9 +5,11 @@ $(document).ready(function() {
   $('#v3-lsec-help-button a').on('click', function() {
     if ($('#v3-lsec-notes-wrapper').is(':visible')) {
       $('#v3-lsec-notes-wrapper').hide();
+      $('#v3-lsec-help-button a').html('&#8853;');
     }
     else {
       $('#v3-lsec-notes-wrapper').show();
+      $('#v3-lsec-help-button a').html('&#8854;');
     }
   });
 

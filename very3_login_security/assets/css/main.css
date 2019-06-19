@@ -1,19 +1,16 @@
 #v3-lsec-help-button {
   float: right;
-  margin: -40px 10px 0 0;
+  margin: -50px 10px 0 0;
 }
 
 #v3-lsec-help-button a {
+  font-size: 250%;
+  color: #aaaaff;
   text-decoration: none;
-  text-align: center;
-  display: inline-block;
-  font-size: 150%;
-  line-height: 150%;
-  width: 25px;
-  height: 25px;
-  border: 1px solid blue;
-  border-radius: 50%;
-  background-color: #eeeeff;
+  font-weight: 200;
+}
+#v3-lsec-help-button a:hover {
+  color: #0000ff;
 }
 
 #v3-lsec-blocked {
