@@ -38,9 +38,9 @@ option to receive email notifications.  The SMS function requires that you have 
 select at least one "Send SMS on..." option to receive SMS notifications.
 
 You can find the Very3 Login Security Plugin in the GetSimple Extend Repository at: 
-http://get-simple.info/extend/plugin/v3l...rity/1211/
+[http://get-simple.info/extend/plugin/v3lsec-very3-login-security/1211/](http://get-simple.info/extend/plugin/v3lsec-very3-login-security/1211/)
 
-For more information see: https://github.com/verythree/v3lsec
+For more information see: [https://github.com/verythree/v3lsec](https://github.com/verythree/v3lsec)
 #
 [![alt text](http://get-simple.info/data/uploads/getsimple-logo-2.png "GetSimple CMS")](http://get-simple.info/)
 
