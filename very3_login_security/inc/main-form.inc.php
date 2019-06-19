@@ -28,12 +28,13 @@
           <label>Support URL</label>
           <input type="text" name="support" value="<?php echo isset($_xml_data->support) ? $_xml_data->support : '';?>" title="Adds a support link to the blocked notification page" placeholder="https://www.support-site.tld" />
         </div>
-        <div class="v3-lsec-1-c" style="padding-top:16px;">
+        <div class="v3-lsec-1-c">
+          <label>Plugin Admin</label>
+          <input type="text" name="plugin_admin" value="<?php echo isset($_xml_data->plugin_admin) ? $_xml_data->plugin_admin : '';?>" title="Enter a user name to be the plugin admin. The V3LSEC tab will be hidden for everyone else" placeholder="user" />
+        </div>
+        <div class="v3-lsec-1-c">
           <input type="checkbox" id="disable-ipinfo-checkbox" title="Disables lookups to ipinfo.io and turns off the location logging. If your server is on a slow connection and logins are taking a long time, you may want to disable this." name="disable_ipinfo" value="yes" <?php echo isset($_xml_data->disable_ipinfo) ? 'checked' : '';?>>
           <label for="disable-ipinfo-checkbox">Disable Lookups to ipinfo.io</label>
-          <div style="height:5px;padding:0;margin:0;"></div>
-          <input type="checkbox" id="hide-plugin-tab-checkbox" title="Removes the plugin tab from the top navigation bar. Useful with multi-user plugins" name="hide_plugin_tab" value="yes" <?php echo isset($_xml_data->hide_plugin_tab) ? 'checked' : '';?>>
-          <label for="hide-plugin-tab-checkbox">Hide the V3LSEC tab and settings</label>
         </div>
       </div>
 

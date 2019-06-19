@@ -10,7 +10,7 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.5',
-  'debug'    => false,
+  'debug'    => true,
   'moddate'  => 'Sun Jun 16 07:54:24 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -34,7 +34,7 @@ $v3_lsec['conf'] = [
     'sms_send_blocked'   => 'no',
     'sms_send_success'   => 'no',
     'disable_ipinfo'     => 'no',
-    'hide_plugin_tab'    => 'no',
+    'plugin_admin'       => '',
   ],
 ];
 
@@ -77,7 +77,7 @@ add_action(
   $v3_lsec['conf']['login']
 );
 
-if ($v3_lsec['conf']['settings']['hide_plugin_tab'] == 'no') {
+if (strtolower($v3_lsec['conf']['settings']['plugin_admin']) == strtolower($USR)) {
   add_action(
     'nav-tab',
     'createNavTab',
@@ -98,17 +98,17 @@ if ($v3_lsec['conf']['settings']['hide_plugin_tab'] == 'no') {
       'report'
     )
   );
-}
 
-add_action(
-  'very3_login_security-sidebar',
-  'createSideMenu',
-  array(
-    $v3_lsec['conf']['plugin'],
-    'Settings',
-    'setup'
-  )
-);
+  add_action(
+    'very3_login_security-sidebar',
+    'createSideMenu',
+    array(
+      $v3_lsec['conf']['plugin'],
+      'Settings',
+      'setup'
+    )
+  );
+}
 
 register_style ('v3_lsec_dt_css', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css', '1.10.19', FALSE);
 queue_style ('v3_lsec_dt_css', GSBACK);
