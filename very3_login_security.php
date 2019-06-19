@@ -34,6 +34,7 @@ $v3_lsec['conf'] = [
     'sms_send_blocked'   => 'no',
     'sms_send_success'   => 'no',
     'disable_ipinfo'     => 'no',
+    'hide_plugin_tab'    => 'no',
   ],
 ];
 
@@ -76,26 +77,28 @@ add_action(
   $v3_lsec['conf']['login']
 );
 
-add_action(
-  'nav-tab',
-  'createNavTab',
-  array(
-    $v3_lsec['conf']['plugin'],
-    $v3_lsec['conf']['plugin'],
-    $v3_lsec['conf']['tabname'],
-    $v3_lsec['conf']['router']
-  )
-);
+if ($v3_lsec['conf']['settings']['hide_plugin_tab'] == 'no') {
+  add_action(
+    'nav-tab',
+    'createNavTab',
+    array(
+      $v3_lsec['conf']['plugin'],
+      $v3_lsec['conf']['plugin'],
+      $v3_lsec['conf']['tabname'],
+      $v3_lsec['conf']['router']
+    )
+  );
 
-add_action(
-  'very3_login_security-sidebar',
-  'createSideMenu',
-  array(
-    $v3_lsec['conf']['plugin'],
-    'Access Log',
-    'report'
-  )
-);
+  add_action(
+    'very3_login_security-sidebar',
+    'createSideMenu',
+    array(
+      $v3_lsec['conf']['plugin'],
+      'Access Log',
+      'report'
+    )
+  );
+}
 
 add_action(
   'very3_login_security-sidebar',
