@@ -3,7 +3,10 @@
 // Very3 Login Security Plugin for GetSimple CMS
 // (c)2019 Very3 (Mark Page [mark@very3.net])
 //---------------------------------------------------
-// See https://github.com/verythree/v3lsec
+// See:
+//    https://github.com/verythree/v3lsec
+//    http://get-simple.info/forums/showthread.php?tid=10896
+//    http://get-simple.info/extend/plugin/v3lsec-very3-login-security/1211/
 //
 $v3_lsec['conf'] = [
   'plugin'   => basename(__FILE__, ".php"),
