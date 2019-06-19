@@ -2,8 +2,10 @@
   <h3><?php echo isset($v3_lsec['conf']['name']) ? $v3_lsec['conf']['name']: '';?></h3>
   <div id="v3-lsec-help-button"><a title="Quick Help" href="#">&#8853;</a></div>
   <div id="v3-lsec-notes-wrapper" style="display:none;">
+    <h2>V3LSEC Help</h2>
     <p><b>Email Settings</b><br/>To receive email notifications you must add both to and from email addresses (they can be the same) and select at least one "Send Email on..." option. This function also requires a local MTA and/or PHP configuration, see your operating system's documentation for more detail.</p>
     <p><b>SMS (Twilio) Settings</b><br/>To receive SMS notifications you must have a <a href="https://www.twilio.com/" target="_blank">Twilio</a> account and select at least one "Send SMS on..." option enabled. To find your SID and token information, please refer to the <a href="https://support.twilio.com/hc/en-us/articles/223136027-Auth-Tokens-and-How-to-Change-Them" target="_blank">Where is my Auth Token?</a> section on the Twilio website.</p> 
+    <p><b>Need Help?</b><br/>If you have any questions, comments, suggestions or complaints, please visit the Very3 Login Security pages on the <a href="http://get-simple.info/forums/showthread.php?tid=10896" target="_blank">GetSimple Community Forum</a>.</p>
   </div>
 
   <div style="clear:both;"></div>

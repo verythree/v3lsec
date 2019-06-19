@@ -9,9 +9,9 @@ $v3_lsec['conf'] = [
   'plugin'   => basename(__FILE__, ".php"),
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
-  'version'  => '1.0.5',
+  'version'  => '1.0.6',
   'debug'    => true,
-  'is_admin' => false,
+  'is_admin' => true,
   'moddate'  => 'Sun Jun 16 07:54:24 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -63,17 +63,14 @@ else {
 }
 
 if (!empty($v3_lsec['conf']['settings']['plugin_admins'])) {
+  $v3_lsec['conf']['is_admin'] = false;
   $_admins = str_getcsv($v3_lsec['conf']['settings']['plugin_admins']);
   $_admins = str_replace(' ', '', $_admins);
   foreach ($_admins as $_a) {
     if (strtolower($USR) == strtolower($_a)) {
       $v3_lsec['conf']['is_admin'] = true;
-      break;
     }
   }
-}
-else {
-  $v3_lsec['conf']['is_admin'] = true;
 }
 
 register_plugin(
