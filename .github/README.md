@@ -36,8 +36,12 @@ Out of the box, this plugin will block a remote IP address after 5 bad login att
 send notifications. You must configure to/from email addresses (they can be the same) and select at least one "Send Email on..." 
 option to receive email notifications.  The SMS function requires that you have a [Twilio](https://www.twilio.com/) account and 
 select at least one "Send SMS on..." option to receive SMS notifications.
-#
 
+You can find the Very3 Login Security Plugin in the GetSimple Extend Repository at: 
+http://get-simple.info/extend/plugin/v3l...rity/1211/
+
+For more information see: https://github.com/verythree/v3lsec
+#
 [![alt text](http://get-simple.info/data/uploads/getsimple-logo-2.png "GetSimple CMS")](http://get-simple.info/)
 
 GetSimple CMS
