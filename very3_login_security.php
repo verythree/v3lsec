@@ -10,7 +10,7 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.5',
-  'debug'    => true,
+  'debug'    => false,
   'moddate'  => 'Sun Jun 16 07:54:24 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -77,7 +77,7 @@ add_action(
   $v3_lsec['conf']['login']
 );
 
-if (strtolower($v3_lsec['conf']['settings']['plugin_admin']) == strtolower($USR)) {
+if (($v3_lsec['conf']['settings']['plugin_admin'] == '') or (strtolower($v3_lsec['conf']['settings']['plugin_admin']) == strtolower($USR))) {
   add_action(
     'nav-tab',
     'createNavTab',

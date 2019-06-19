@@ -1,7 +1,7 @@
 <div id="v3-lsec-main">
   <h3><?php echo isset($v3_lsec['conf']['name']) ? $v3_lsec['conf']['name']: '';?></h3>
-
-  <div id="v3-lsec-notes-wrapper">
+  <div id="v3-lsec-help-button"><a href="#">?</a></div>
+  <div id="v3-lsec-notes-wrapper" style="display:none;">
     Out of the box, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and send no notification.
     You must add both email addresses (they can be the same) and select at least one "Send Email on..." option to recieve email notifications. 
     The SMS function requires that you have a <a href="https://www.twilio.com/" target="_blank">Twilio</a> account and select at least one 
@@ -30,7 +30,7 @@
         </div>
         <div class="v3-lsec-1-c">
           <label>Plugin Admin</label>
-          <input type="text" name="plugin_admin" value="<?php echo isset($_xml_data->plugin_admin) ? $_xml_data->plugin_admin : '';?>" title="Enter a user name to be the plugin admin. The V3LSEC tab will be hidden for everyone else" placeholder="user" />
+          <input type="text" name="plugin_admin" value="<?php echo isset($_xml_data->plugin_admin) ? $_xml_data->plugin_admin : '';?>" title="For use with multi-user plugins. Enter a user name to be the plugin admin. The V3LSEC tab will be hidden for everyone else." placeholder="User Name" />
         </div>
         <div class="v3-lsec-1-c">
           <input type="checkbox" id="disable-ipinfo-checkbox" title="Disables lookups to ipinfo.io and turns off the location logging. If your server is on a slow connection and logins are taking a long time, you may want to disable this." name="disable_ipinfo" value="yes" <?php echo isset($_xml_data->disable_ipinfo) ? 'checked' : '';?>>
