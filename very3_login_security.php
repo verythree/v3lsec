@@ -10,7 +10,8 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.5',
-  'debug'    => false,
+  'debug'    => true,
+  'is_admin' => false,
   'moddate'  => 'Sun Jun 16 07:54:24 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -34,7 +35,7 @@ $v3_lsec['conf'] = [
     'sms_send_blocked'   => 'no',
     'sms_send_success'   => 'no',
     'disable_ipinfo'     => 'no',
-    'plugin_admin'       => '',
+    'plugin_admins'      => '',
   ],
 ];
 
@@ -61,6 +62,16 @@ else {
   }
 }
 
+if (isset($v3_lsec['conf']['settings']['plugin_admins'])) {
+  $_admins = str_getcsv($v3_lsec['conf']['settings']['plugin_admins']);
+  foreach ($_admins as $_a) {
+    if (strtolower($USR) == strtolower($_a)) {
+      $v3_lsec['conf']['is_admin'] = true;
+      break;
+    }
+  }
+}
+
 register_plugin(
   $v3_lsec['conf']['plugin'],   // Plugin id
   $v3_lsec['conf']['name'],     // Plugin name
@@ -77,7 +88,7 @@ add_action(
   $v3_lsec['conf']['login']
 );
 
-if (($v3_lsec['conf']['settings']['plugin_admin'] == '') or (strtolower($v3_lsec['conf']['settings']['plugin_admin']) == strtolower($USR))) {
+if ($v3_lsec['conf']['is_admin']) {
   add_action(
     'nav-tab',
     'createNavTab',

@@ -2,6 +2,15 @@ $(document).ready(function() {
   $('#nav_very3_login_security a i').removeClass('fa-puzzle-piece');
   $('#nav_very3_login_security a i').addClass('fa-unlock-alt');
 
+  $('#v3-lsec-help-button a').on('click', function() {
+    if ($('#v3-lsec-notes-wrapper').is(':visible')) {
+      $('#v3-lsec-notes-wrapper').hide();
+    }
+    else {
+      $('#v3-lsec-notes-wrapper').show();
+    }
+  });
+
   $('.v3-lsec-show-full').on('click', function() {
     $('#v3-lsec-overlay-title').html("Log Detail"); 
     $('#v3-lsec-overlay-content').html($(this).data('full')); 

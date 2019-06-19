@@ -1,6 +1,6 @@
 #v3-lsec-help-button {
   float: right;
-  margin: -40px 20px 0 0;
+  margin: -40px 10px 0 0;
 }
 
 #v3-lsec-help-button a {
@@ -72,9 +72,23 @@
   margin: auto;
 }
 
+#v3-lsec-main fieldset {
+  border: 1px solid #a0a0a0;
+  padding: 20px;
+  border-radius: 4px;
+}
+#v3-lsec-main fieldset legend {
+  font-weight: bold;
+  font-size: 110%;
+}
+
 #v3-lsec-notes-wrapper {
   font-family: sans-serif;
-  margin: 0 0 40px 0;
+  padding: 20px;
+  border: 1px solid #0000ff;
+  border-radius: 4px;
+  background-color: #eeeeff;
+  margin: 0 10px 40px 10px;
   font-size: 13px;
   line-height: 18px;
 }
@@ -118,16 +132,14 @@
   display: grid;
   grid-template-columns: 50% 50%;
   grid-gap: 5px;
-  padding: 0 0 8px 0;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 0;
 }
 
 .v3-lsec-3-c {
   display: grid;
   grid-template-columns: 30% 30% 40%;
   grid-gap: 5px;
-  padding: 0 0 8px 0;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 0;
 }
 
 .v3-lsec-1-c {
