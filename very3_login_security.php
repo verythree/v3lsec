@@ -151,39 +151,6 @@ function v3_lsec_router() {
 
 
 #--------------------------------------------------------------------------------------------------
-function v3_lsec_ipinfo() {
-  global $v3_lsec;
-
-  $_return = array();
-  $_ripa   = $_SERVER['REMOTE_ADDR'];
-
-  if ($v3_lsec['conf']['settings']['disable_ipinfo'] != 'yes') {
-    $_json = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
-  }
-
-  if (isset($_json->city)) { 
-    $_return['city']     = $_json->city;
-    $_return['region']   = $_json->region;
-    $_return['country']  = $_json->country;
-    $_return['postal']   = $_json->postal;
-    $_return['location'] = $_json->loc;
-    $_return['org']      = $_json->org;
-  }
-  else {
-    $_return['city']     = '-';
-    $_return['region']   = '-';
-    $_return['country']  = '-';
-    $_return['postal']   = '-';
-    $_return['location'] = '-,-';
-    $_return['org']      = '-';
-  }
-
-  return $_return;
-}
-#--------------------------------------------------------------------------------------------------
-
-
-#--------------------------------------------------------------------------------------------------
 function v3_lsec_login() {
   global $user_xml, $userid, $password, $v3_lsec;
 
@@ -507,6 +474,39 @@ function v3_lsec_setup() {
   }
 
   require($v3_lsec['conf']['plugpath'].'/inc/main-form.inc.php');
+}
+#--------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------
+function v3_lsec_ipinfo() {
+  global $v3_lsec;
+
+  $_return = array();
+  $_ripa   = $_SERVER['REMOTE_ADDR'];
+
+  if ($v3_lsec['conf']['settings']['disable_ipinfo'] != 'yes') {
+    $_json = json_decode(file_get_contents("http://ipinfo.io/{$_ripa}/json"));
+  }
+
+  if (isset($_json->city)) { 
+    $_return['city']     = $_json->city;
+    $_return['region']   = $_json->region;
+    $_return['country']  = $_json->country;
+    $_return['postal']   = $_json->postal;
+    $_return['location'] = $_json->loc;
+    $_return['org']      = $_json->org;
+  }
+  else {
+    $_return['city']     = '-';
+    $_return['region']   = '-';
+    $_return['country']  = '-';
+    $_return['postal']   = '-';
+    $_return['location'] = '-,-';
+    $_return['org']      = '-';
+  }
+
+  return $_return;
 }
 #--------------------------------------------------------------------------------------------------
 
