@@ -12,7 +12,7 @@ $(document).ready(function() {
       timeout: {
         required: true,
         number: true,
-        min: 1
+        min: 5
       },
       support: {
         required: false,
