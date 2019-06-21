@@ -14,7 +14,7 @@ $v3_lsec['conf'] = [
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.6',
   'debug'    => false,
-  'moddate'  => 'Wed Jun 19 22:32:08 2019 -0500',
+  'moddate'  => 'Fri Jun 21 08:03:05 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
   'type'     => 'very3_login_security',
@@ -134,8 +134,8 @@ queue_style ('v3_lsec_dt_css', GSBACK);
 register_style ('v3_lsec_css', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/css/main.css', '1.0', 'all');
 queue_style ('v3_lsec_css', GSBACK);
 
-register_style ('font_awesome','//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', '5.8.2', 'all');
-queue_style ('font_awesome', GSBACK );
+register_style ('v3_lsec_fontawesome','//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', '5.8.2', 'all');
+queue_style ('v3_lsec_fontawesome', GSBACK );
 
 register_script('v3_lsec_dt_js', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js', '1.10.19', FALSE);
 queue_script('v3_lsec_dt_js', GSBACK);

@@ -71,6 +71,7 @@
 
 #v3-lsec-main fieldset {
   border: 1px solid #a0a0a0;
+  background-color: #f8f8f8;
   padding: 20px;
   border-radius: 4px;
 }
@@ -82,9 +83,9 @@
 #v3-lsec-notes-wrapper {
   font-family: sans-serif;
   padding: 20px;
-  border: 1px solid #0000ff;
+  border: 1px solid #bbbbff;
   border-radius: 4px;
-  background-color: #eeeeff;
+  background-color: #f5f5ff;
   margin: 0 10px 40px 10px;
   font-size: 13px;
   line-height: 18px;
