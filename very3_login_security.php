@@ -13,7 +13,7 @@ $v3_lsec['conf'] = [
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
   'version'  => '1.0.6',
-  'debug'    => false,
+  'debug'    => true,
   'moddate'  => 'Wed Jun 19 22:32:08 2019 -0500',
   'author'   => 'Very3 [mark@very3.net]',
   'url'      => 'https://very3.net',
@@ -45,10 +45,13 @@ $v3_lsec['conf'] = [
 if (file_exists($v3_lsec['conf']['datapath'].'/config.xml')) {
   $v3_lsec['conf']['settings'] = array_merge($v3_lsec['conf']['settings'],(array) getXml($v3_lsec['conf']['datapath'].'/config.xml'));
 }
-else {
-  if (!file_exists(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'])) {
-    mkdir(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'], 0700, true);
-  }
+
+if (!file_exists(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'].'/db/ip.db')) {
+  mkdir(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'].'/db/ip.db', 0700, true);
+}
+
+if (!file_exists(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'].'/logs')) {
+  mkdir(GSDATAOTHERPATH.'/'.$v3_lsec['conf']['plugin'].'/logs', 0700, true);
 }
 
 if ($v3_lsec['conf']['debug']) {
@@ -125,16 +128,19 @@ if ($v3_lsec['conf']['is_admin']) {
   );
 }
 
-register_style ('v3_lsec_dt_css', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css', '1.10.19', FALSE);
+register_style ('v3_lsec_dt_css', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css', '1.10.19', 'all');
 queue_style ('v3_lsec_dt_css', GSBACK);
 
-register_style ('v3_lsec_css', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/css/main.css', '1.0', FALSE);
+register_style ('v3_lsec_css', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/css/main.css', '1.0', 'all');
 queue_style ('v3_lsec_css', GSBACK);
 
-register_script('v3_lsec_dt_js', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js', '1.10.19', TRUE);
+register_style ('font_awesome','//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', '5.8.2', 'all');
+queue_style ('font_awesome', GSBACK );
+
+register_script('v3_lsec_dt_js', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js', '1.10.19', FALSE);
 queue_script('v3_lsec_dt_js', GSBACK);
 
-register_script('v3_lsec_js', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/js/main.js', '1.0', TRUE);
+register_script('v3_lsec_js', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/js/main.js', '1.0', FALSE);
 queue_script('v3_lsec_js', GSBACK);
 
 
