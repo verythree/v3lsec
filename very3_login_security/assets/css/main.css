@@ -1,3 +1,9 @@
+li#nav_very3_login_security a:before {
+  font-family: FontAwesome;
+  content: "\f023";
+  padding-right: 6px;
+}
+
 #v3-lsec-help-button {
   float: right;
   margin: -50px 10px 0 0;
