@@ -40,11 +40,11 @@
         <div class="v3-lsec-2-c">
           <div class="v3-lsec-1-c">
             <label>Max Auth Attempts</label>
-            <input type="text" name="maxtries" value="<?php echo isset($_xml_data->maxtries) ? $_xml_data->maxtries : '';?>" placeholder="Sane value: 3-5" />
+            <input type="text" name="maxtries" value="<?php echo isset($_xml_data->maxtries) ? $_xml_data->maxtries : '5';?>" placeholder="Sane value: 3-5" />
           </div>
           <div class="v3-lsec-1-c">
             <label>Time to Block IP (seconds)</label>
-            <input type="text" name="timeout" value="<?php echo isset($_xml_data->timeout) ? $_xml_data->timeout : '';?>" placeholder="Sane value: 3600-86400" />
+            <input type="text" name="timeout" value="<?php echo isset($_xml_data->timeout) ? $_xml_data->timeout : '600';?>" placeholder="Sane value: 600-86400" />
           </div>
           <div class="v3-lsec-1-c">
             <label>Support URL</label>
