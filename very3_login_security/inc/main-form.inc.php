@@ -5,7 +5,7 @@
     <h2>V3LSEC Help</h2>
     <p>
       <b>Main Settings</b><br/>
-      By default, this plugin will block a remote IP address after 5 bad login attempts for 600 seconds (10 minutes) and does not send notifications. Set the "Max Auth Attempts" 
+      By default, this plugin will block a remote IP address after 5 failed login attempts for 600 seconds (10 minutes) and does not send notifications. Set the "Max Auth Attempts" 
       value to the number of attempts you wish to allow before blocking the IP address. The user will not be able to submit the login form again until the "Time to Block" seconds 
       has elapsed. If you wish to show the V3LSEC tab and logs only to specific users (and hide from everyone else), add their usernames (comma seperated) to the "Plugin Admins" 
       field. The "Support URL" link will be shown on the blocked IP page if you wish to provide support for users who need assistance with blocked IP addresses. Checking the "Disable 
