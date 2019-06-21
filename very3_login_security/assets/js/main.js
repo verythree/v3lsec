@@ -2,6 +2,34 @@ $(document).ready(function() {
   $('#nav_very3_login_security a i').removeClass('fa-puzzle-piece');
   $('#nav_very3_login_security a i').addClass('fa-unlock-alt');
 
+  $('#v3-lsec-main-form').validate({
+    rules: {
+      maxtries: {
+        required: true,
+        number: true,
+        min: 2
+      },
+      timeout: {
+        required: true,
+        number: true,
+        min: 1
+      },
+      from: {
+        required: false,
+        email: true
+      },
+      to: {
+        required: false,
+        email: true
+      },
+      maxtries: {
+        required: true,
+        number: true,
+        min: 3
+      },
+    }
+  });
+
   $('#v3-lsec-help-button a').on('click', function() {
     if ($('#v3-lsec-notes-wrapper').is(':visible')) {
       $('#v3-lsec-notes-wrapper').hide();

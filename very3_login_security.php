@@ -140,6 +140,9 @@ queue_style ('v3_lsec_fontawesome', GSBACK );
 register_script('v3_lsec_dt_js', '//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js', '1.10.19', FALSE);
 queue_script('v3_lsec_dt_js', GSBACK);
 
+register_script('v3_lsec_jv_js', '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js', '1.19.1', FALSE);
+queue_script('v3_lsec_jv_js', GSBACK);
+
 register_script('v3_lsec_js', $SITEURL.'/plugins/'.$v3_lsec['conf']['plugin'].'/assets/js/main.js', '1.0', FALSE);
 queue_script('v3_lsec_js', GSBACK);
 
