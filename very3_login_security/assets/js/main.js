@@ -14,6 +14,10 @@ $(document).ready(function() {
         number: true,
         min: 1
       },
+      support: {
+        required: false,
+        url: true
+      },
       from: {
         required: false,
         email: true
@@ -22,11 +26,16 @@ $(document).ready(function() {
         required: false,
         email: true
       },
-      maxtries: {
-        required: true,
-        number: true,
-        min: 3
+      tw_sid: {
+        required: false,
+        minlength: 34,
+        maxlength: 34
       },
+      tw_token: {
+        required: false,
+        minlength: 32,
+        maxlength: 32
+      }
     }
   });
 
