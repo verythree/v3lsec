@@ -1,9 +1,9 @@
 # Very3 Logon Security for GetSimple
 (c)2021 Very3 - All Rights Reserved - https://very3.net
 
-SLOC as of Wed Feb  3 07:25:01 CST 2021
+SLOC as of Wed Feb  3 08:25:01 CST 2021
 ```
-github.com/AlDanial/cloc v 1.74  T=1.29 s (161.3 files/s, 79612.7 lines/s)
+github.com/AlDanial/cloc v 1.74  T=1.79 s (116.0 files/s, 57242.8 lines/s)
 --------------------------------------------------------------------------------
 Language                      files          blank        comment           code
 --------------------------------------------------------------------------------
