@@ -3,7 +3,7 @@
 // Very3 Login Security Plugin for GetSimple CMS
 // (c)2019-2023 Very3 Technology Consultants
 // Author: Mark Page [mark@very3.net]
-// Internal Version: 23.12.22.818
+// Internal Version: 23.12.22.837
 // Released: Fri Dec 22 08:18:17 2023 -0600
 //---------------------------------------------------
 // See:
@@ -15,10 +15,10 @@ $v3_lsec['conf'] = [
   'plugin'   => basename(__FILE__, ".php"),
   'plugpath' => __DIR__.'/'.basename(__FILE__, ".php"),
   'datapath' => GSDATAOTHERPATH.'/very3_login_security',
-  'version'  => '23.12.22.818',
+  'version'  => '23.12.22.837',
   'debug'    => false,
   'moddate'  => 'Fri Dec 22 08:18:51 2023 -0600',
-  'author'   => 'Very3 [mark@very3.net]',
+  'author'   => 'Very3 Technology Consultants [mark@very3.net]',
   'url'      => 'https://very3.net',
   'type'     => 'very3_login_security',
   'tabname'  => 'V3LSEC',
