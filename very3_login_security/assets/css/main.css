@@ -1,0 +1,270 @@
+/*
+** Very3 Login Security Plugin for GetSimple CMS
+** (c)2019-2023 Very3 Technology Consultants
+** Author: Mark Page [mark@very3.net]
+** Internal Version: 23.12.22.823
+** Released: Fri Dec 22 08:18:17 2023 -0600
+*/
+
+#v3-lsec-help-button {
+  float: right;
+  margin: -50px 10px 0 0;
+}
+
+#v3-lsec-help-button a {
+  font-size: 250%;
+  color: #aaaaff;
+  text-decoration: none;
+  font-weight: 200;
+}
+#v3-lsec-help-button a:hover {
+  color: #0000ff;
+}
+
+#v3-lsec-blocked {
+  margin: 0;
+  font-family: sans-serif;
+  background: url(/plugins/very3_login_security/assets/img/stripe.png);
+}
+
+#v3-lsec-blocked h3 {
+  padding: 20px;
+  margin: 0 0 2px 0;
+  background-color: red;
+  color: #fff;
+}
+
+#v3-lsec-blocked p {
+  margin: 10px 0 10px 0;
+  line-height: 20px;
+}
+
+#v3-lsec-blocked .outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#v3-lsec-blocked .inner {
+  width: 50%;
+  max-width: 600px;
+  background: #fff;
+  padding: 0;
+  margin: 0;
+  border: 0px solid black;
+  box-shadow: 0 0 11px 1px black;
+}
+
+#v3-lsec-blocked .content {
+  background: #fff;
+  padding: 20px;
+}
+
+#v3-lsec-blocked .footer {
+  color: #909090;
+  font-size: 12px;
+  text-align: center;
+  margin: 20px 0 0 0;
+  padding: 10px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f0f0f0
+}
+
+#v3-lsec-main {
+  font-family: sans-serif;
+  width: 99%;
+  margin: auto;
+}
+
+#v3-lsec-main fieldset {
+  border: 1px solid #a0a0a0;
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 4px;
+}
+#v3-lsec-main fieldset legend {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+#v3-lsec-notes-wrapper {
+  font-family: sans-serif;
+  padding: 20px 20px 10px 20px;
+  border: 1px solid #bbbbff;
+  border-radius: 4px;
+  background-color: #f5f5ff;
+  margin: 0 10px 40px 10px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+#v3-lsec-notes-wrapper a {
+  font-weight: normal;
+}
+
+#v3-lsec-form-wrapper {
+  margin: 0 auto;
+  padding: 0 10px 0 10px;
+}
+
+#v3-lsec-main input[type="submit"],
+#v3-lsec-main input[type="text"] {
+  padding: 8px;
+  margin: 2px 0 2px 0;
+  border: 1px solid #415a66;
+  border-radius: 2px;
+}
+
+#v3-lsec-main input[type="text"] {
+  width: 100%;
+}
+
+#v3-lsec-main input[type="checkbox"] {
+  float: left;
+  margin: 1px 4px 0 0;
+}
+
+#v3-lsec-main input[type="submit"] {
+  float: right;
+  background-color: #fff;
+  margin: 0 10px 0 0;
+}
+
+#v3-lsec-main label {
+}
+
+.v3-lsec-2-c {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 5px;
+  padding: 0;
+}
+
+.v3-lsec-3-c {
+  display: grid;
+  grid-template-columns: 30% 30% 40%;
+  grid-gap: 5px;
+  padding: 0;
+}
+
+.v3-lsec-1-c {
+  width: 90%;
+}
+
+.v3-lsec-spacer {
+  height: 30px;
+}
+
+#v3-lsec-report_wrapper .dataTables_length select,
+#v3-lsec-report_wrapper .dataTables_paginate .paginate_button.current, 
+#v3-lsec-report_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: #fff;
+}
+
+#v3-lsec-report-buttons {
+  margin: 20px 0 0 0;
+}
+
+#v3-lsec-report-buttons button {
+  border: 1px solid #a0a0a0;
+  background: #fff;
+  padding: 6px;
+  width: 120px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+#v3-lsec-report_wrapper table thead th {
+    padding: 10px 0 4px 10px;
+}
+
+#v3-lsec-report_wrapper table td {
+  border-bottom: 1px solid #e0e0e0;
+  border-top: 0;
+}
+
+#v3-lsec-report_wrapper table .Blocked {
+  background-color: #ffeeee;
+}
+#v3-lsec-report_wrapper table .Failed {
+  background-color: #ffffee;
+}
+#v3-lsec-report_wrapper table .Successful {
+  background-color: #eeffee;
+}
+
+#v3-lsec-version {
+  text-align: right;
+  color: #a0a0a0;
+  font-size: 10px;
+}
+
+#v3-lsec-overlay {
+  z-index: 10000;
+  position: absolute;
+  width: 33vw;
+  padding: 0;
+  background-color: #fff;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  left: 0;
+  right: 0;
+  border: 1px solid #182227;
+}
+#v3-lsec-overlay table {
+  width: 100%;
+  margin: auto;
+}
+#v3-lsec-overlay table tr {
+  border: 0;
+}
+#v3-lsec-overlay table tr:nth-child(odd) td,
+#v3-lsec-overlay table tr:nth-child(odd) th {
+  background-color: #f2f2f2 !important;
+}
+#v3-lsec-overlay table th,
+#v3-lsec-overlay table td {
+  padding: 4px;
+  margin: 0;
+  border: 0;
+}
+#v3-lsec-overlay table th {
+  text-align: right;
+  vertical-align: top;
+  color: #000;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header {
+  text-align: left;
+  background-color: #182227;
+  width: 100%;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid #182227;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header #v3-lsec-overlay-title {
+  color: #fff;
+  font-size: 18px;
+  padding: 0 0 0 8px;
+  line-height: 38px;
+  text-decoration: none;
+  font-weight: bold;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header #v3-lsec-overlay-closer {
+  float: right;
+  padding: 5px 15px 0 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 28px;
+}
+#v3-lsec-overlay #v3-lsec-overlay-header #v3-lsec-overlay-closer:hover {
+  color: red;
+}
+#v3-lsec-overlay #v3-lsec-overlay-content {
+  margin: 0;
+  padding: 10px;
+}
+
